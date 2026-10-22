@@ -11,8 +11,20 @@ Step IDs in commits (S-xx, B-xx, I-xx) refer to the "Plan pas cu pas" document.
 ```bash
 cd backend
 ./mvnw spring-boot:run                 # http://localhost:8080/actuator/health
-./mvnw test                            # repository round trip + time format tests
+./mvnw test                            # 14 tests: repositories, replay end to end, review, report, exports
 ```
+
+Or from the repository root (loads `config/.env` if present):
+
+```bash
+scripts/run-local.sh [--clean]         # --clean wipes backend/.data first
+scripts/reset-demo.sh [base_url]       # POST /demo/reset, needs PN_WRITE_API_KEY
+scripts/smoke-test.sh [base_url]       # P0-17 checklist: events, context, review, report, export
+GCP_PROJECT=<id> scripts/deploy-cloudrun.sh   # Cloud Build + Cloud Run, europe-west3, 1 instance
+```
+
+At startup the service logs one `SERVICE_STARTED` line with profile, simulated mode, replay speed
+and whether a write key is set; check it after every deploy.
 
 Local data lives in `backend/.data/` (H2 file, exports). Delete the folder to start clean.
 The H2 console is at `/h2-console` on the `local` profile only (JDBC URL `jdbc:h2:file:./.data/pelanode`).
@@ -40,5 +52,5 @@ backend/                 Spring Boot 3.5, Java 21
   src/main/java/.../repo     JdbcTemplate repositories
 data/demo/hack-001/      seed pack (mission, node, track, observations, media, context)
 config/.env.example      all PN_* keys, no values
-scripts/                 build, run, deploy, reset and smoke-test scripts (added step by step)
+scripts/                 demo pack builder, run-local, reset-demo, smoke-test, deploy-cloudrun
 ```
