@@ -1,12 +1,12 @@
 # PelaNode PoC: one image for Cloud Run (F0) and the demo laptop (F1).
-# The UI stage is added in step I-01 (P0-11 section 4, plan step I-01).
+# The UI is a prebuilt static bundle in src/main/resources/static (scripts/build-ui.sh, step I-01).
 
 FROM maven:3.9-eclipse-temurin-21 AS backend
 WORKDIR /build
-COPY backend/pom.xml backend/mvnw ./
-COPY backend/.mvn .mvn
+COPY pom.xml mvnw ./
+COPY .mvn .mvn
 RUN mvn -q -B dependency:go-offline
-COPY backend/src src
+COPY src src
 RUN mvn -q -B -DskipTests package
 
 FROM eclipse-temurin:21-jre

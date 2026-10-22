@@ -1,10 +1,9 @@
 # build output
-backend/target/
+target/
 **/node_modules/
 dist/
 
 # local runtime data (H2 files, exports)
-backend/.data/
 .data/
 
 # secrets: only config/.env.example is committed
@@ -16,6 +15,3 @@ config/.env
 *.iml
 .vscode/
 .DS_Store
-
-# UI bundle copied by scripts/build-ui.sh (source lives in Recycllux/pelanode-mission-portal)
-backend/src/main/resources/static/

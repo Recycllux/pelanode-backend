@@ -1,4 +1,4 @@
-backend/target
-backend/.data
+target
+.data
 .git
 config/.env

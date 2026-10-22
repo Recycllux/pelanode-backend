@@ -1,13 +1,14 @@
 #!/usr/bin/env bash
 # Step I-01: build the Lovable UI (Recycllux/pelanode-mission-portal) in http mode and copy it into
-# backend/src/main/resources/static, so the jar and the Docker image serve UI + API from one origin.
-# The static folder is git-ignored: the UI's source of truth stays in its own repository.
+# src/main/resources/static, so the jar and the Docker image serve UI + API from one origin.
+# The bundle is committed so that a fresh clone runs with the UI; rerun this script and commit the
+# result after UI changes. The UI's source of truth stays in its own repository.
 # Usage: scripts/build-ui.sh [path-to-pelanode-mission-portal]   (default ../pelanode-mission-portal)
 # Needs bun (https://bun.sh); npm is the fallback.
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 UI_SRC="$(cd "${1:-$ROOT/../pelanode-mission-portal}" && pwd)"
-DEST="$ROOT/backend/src/main/resources/static"
+DEST="$ROOT/src/main/resources/static"
 WORK="$(mktemp -d)"
 trap 'rm -rf "$WORK"' EXIT
 
