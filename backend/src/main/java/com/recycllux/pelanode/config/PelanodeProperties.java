@@ -9,6 +9,7 @@ public record PelanodeProperties(
         String mediaRoot,
         String exportDir,
         String demoMissionId,
+        boolean seedOnStartup,
         boolean simulatedMode,
         String replaySpeed,
         boolean replayAutostart,

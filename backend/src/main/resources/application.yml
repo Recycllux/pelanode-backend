@@ -46,6 +46,7 @@ pelanode:
   media-root: ${PN_MEDIA_ROOT:../data/demo/hack-001/media}
   export-dir: ${PN_EXPORT_DIR:./.data/exports}
   demo-mission-id: ${PN_DEMO_MISSION_ID:HACK-001}
+  seed-on-startup: ${PN_SEED_ON_STARTUP:true}
   simulated-mode: ${PN_SIMULATED_MODE:true}
   replay-speed: ${PN_REPLAY_SPEED:demo}
   replay-autostart: ${PN_REPLAY_AUTOSTART:false}
