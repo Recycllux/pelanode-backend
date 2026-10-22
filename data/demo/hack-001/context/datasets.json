@@ -1,0 +1,26 @@
+[
+  {
+    "dataset_id": "sim_hydro_discharge",
+    "provider": "Simulated (NIMH-style)",
+    "name": "Simulated river discharge",
+    "variables": [
+      "discharge"
+    ],
+    "format": "json",
+    "licence": "Synthetic, HACK-001 pack",
+    "provenance": "simulated",
+    "status": "loaded"
+  },
+  {
+    "dataset_id": "sim_hydro_level",
+    "provider": "Simulated (EAMEDR-style)",
+    "name": "Simulated water level",
+    "variables": [
+      "water_level"
+    ],
+    "format": "json",
+    "licence": "Synthetic, HACK-001 pack",
+    "provenance": "simulated",
+    "status": "loaded"
+  }
+]

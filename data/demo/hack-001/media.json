@@ -1,0 +1,74 @@
+[
+  {
+    "media_id": "SURF-003210",
+    "observation_id": "OBS-HACK-001-S-0142",
+    "kind": "frame",
+    "uri": "/media/surface/SURF-003210.jpg",
+    "width_px": 1280,
+    "height_px": 720,
+    "mime_type": "image/jpeg",
+    "provenance": "placeholder",
+    "licence_note": "Placeholder until the team footage is delivered",
+    "sha256": null
+  },
+  {
+    "media_id": "UW-003210",
+    "observation_id": "OBS-HACK-001-U-0142",
+    "kind": "frame",
+    "uri": "/media/underwater/UW-003210.jpg",
+    "width_px": 1280,
+    "height_px": 720,
+    "mime_type": "image/jpeg",
+    "provenance": "placeholder",
+    "licence_note": "Placeholder until the team footage is delivered",
+    "sha256": null
+  },
+  {
+    "media_id": "UW-003892",
+    "observation_id": "OBS-HACK-001-U-0143",
+    "kind": "frame",
+    "uri": "/media/underwater/UW-003892.jpg",
+    "width_px": 1280,
+    "height_px": 720,
+    "mime_type": "image/jpeg",
+    "provenance": "placeholder",
+    "licence_note": "Placeholder until the team footage is delivered",
+    "sha256": null
+  },
+  {
+    "media_id": "SURF-003892",
+    "observation_id": "OBS-HACK-001-S-0143",
+    "kind": "frame",
+    "uri": "/media/surface/SURF-003892.jpg",
+    "width_px": 1280,
+    "height_px": 720,
+    "mime_type": "image/jpeg",
+    "provenance": "placeholder",
+    "licence_note": "Placeholder until the team footage is delivered",
+    "sha256": null
+  },
+  {
+    "media_id": "UW-TBD-0144",
+    "observation_id": "OBS-HACK-001-U-0144",
+    "kind": "frame",
+    "uri": "/media/underwater/UW-TBD-0144.jpg",
+    "width_px": 1280,
+    "height_px": 720,
+    "mime_type": "image/jpeg",
+    "provenance": "placeholder",
+    "licence_note": "Placeholder until the team footage is delivered",
+    "sha256": null
+  },
+  {
+    "media_id": "SURF-TBD-0144",
+    "observation_id": "OBS-HACK-001-S-0144",
+    "kind": "frame",
+    "uri": "/media/surface/SURF-TBD-0144.jpg",
+    "width_px": 1280,
+    "height_px": 720,
+    "mime_type": "image/jpeg",
+    "provenance": "placeholder",
+    "licence_note": "Placeholder until the team footage is delivered",
+    "sha256": null
+  }
+]
