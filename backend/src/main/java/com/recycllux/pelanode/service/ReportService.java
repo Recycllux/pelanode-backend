@@ -14,6 +14,7 @@ import com.recycllux.pelanode.repo.EventRepository;
 import com.recycllux.pelanode.repo.MissionRepository;
 import com.recycllux.pelanode.repo.ObservationRepository;
 import com.recycllux.pelanode.repo.TrackRepository;
+import com.recycllux.pelanode.replay.Simulator;
 import com.recycllux.pelanode.web.ApiException;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -56,10 +57,11 @@ public class ReportService {
     private final PelanodeProperties props;
     private final JdbcTemplate jdbc;
     private final ObjectMapper mapper;
+    private final Simulator simulator;
 
     public ReportService(MissionRepository missions, TrackRepository track, EventRepository events,
                          ObservationRepository observations, ContextRepository context, EventViews views,
-                         PelanodeProperties props, JdbcTemplate jdbc, ObjectMapper mapper) {
+                         PelanodeProperties props, JdbcTemplate jdbc, ObjectMapper mapper, Simulator simulator) {
         this.missions = missions;
         this.track = track;
         this.events = events;
@@ -69,6 +71,7 @@ public class ReportService {
         this.props = props;
         this.jdbc = jdbc;
         this.mapper = mapper;
+        this.simulator = simulator;
     }
 
     /**
@@ -77,8 +80,10 @@ public class ReportService {
      */
     public Map<String, Object> summary(String missionId) {
         Mission m = missions.findMission(missionId).orElseThrow(() -> ApiException.notFound("Mission", missionId));
-        List<EventRecord> list = events.findByMission(missionId, null);
-        List<TrackPoint> points = track.findByMission(missionId, null);
+        // Like the UI, the summary covers data up to the replay's mission time (seek deletes nothing).
+        Instant until = missionId.equals(props.demoMissionId()) ? simulator.clock().missionTime() : m.plannedEnd();
+        List<EventRecord> list = events.findByMission(missionId, until);
+        List<TrackPoint> points = track.findByMission(missionId, until);
         double km = Math.round(pathKm(points) * 100) / 100.0;
 
         Map<String, Long> byType = new TreeMap<>(list.stream()
@@ -88,8 +93,9 @@ public class ReportService {
         long open = list.stream()
                 .filter(e -> "review_required".equals(e.attention()) && "unreviewed".equals(e.reviewStatus())).count();
         long reviewed = list.stream().filter(e -> !"unreviewed".equals(e.reviewStatus())).count();
-        Long obsCount = jdbc.queryForObject("SELECT COUNT(*) FROM observation WHERE mission_id = ?", Long.class,
-                missionId);
+        Long obsCount = jdbc.queryForObject(
+                "SELECT COUNT(*) FROM observation WHERE mission_id = ? AND captured_at <= ?", Long.class,
+                missionId, java.sql.Timestamp.from(until));
 
         Map<String, Object> s = new LinkedHashMap<>();
         s.put("mission_id", missionId);
@@ -98,16 +104,23 @@ public class ReportService {
         window.put("start", m.plannedStart());
         window.put("end", m.plannedEnd());
         s.put("window", window);
+        s.put("period_start", m.plannedStart());
+        s.put("period_end", m.plannedEnd());
+        s.put("until", until);
         s.put("distance_km", km);
         s.put("path_length_km", km);
         s.put("observations", obsCount);
         s.put("events_total", list.size());
+        s.put("events", list.size());
         s.put("events_by_type", byType);
         s.put("events_by_review_status", byStatus);
         s.put("review_required_open", open);
+        s.put("review_required", open);
         s.put("reviewed", reviewed);
         s.put("model_versions", modelVersions(list));
-        s.put("context_datasets", contextDatasets(list));
+        List<Map<String, Object>> datasets = contextDatasets(list);
+        s.put("context_datasets", datasets);
+        s.put("datasets", datasets);
         s.put("data_origin", m.dataOrigin());
         s.put("simulation_note", simulationNote(list, points));
         s.put("generated_at", Instant.now());

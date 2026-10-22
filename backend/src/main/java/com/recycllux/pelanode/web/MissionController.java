@@ -89,12 +89,38 @@ public class MissionController {
         Instant end = to != null ? parse(to) : mission.plannedEnd().plus(CONTEXT_MARGIN);
         List<ContextRecord> records = context.findRecords(start, end, variable);
         Set<String> used = records.stream().map(ContextRecord::datasetId).collect(Collectors.toSet());
-        List<DatasetSource> datasets = context.findAllDatasets().stream()
-                .filter(d -> used.contains(d.datasetId())).toList();
+        List<Map<String, Object>> datasets = context.findAllDatasets().stream()
+                .filter(d -> used.contains(d.datasetId()))
+                .map(d -> datasetView(d, records)).toList();
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("datasets", datasets);
         body.put("records", records);
         return body;
+    }
+
+    /**
+     * The registry entry plus what the UI's map and chart need for one station: variable, unit,
+     * station name and position (from the dataset's first record) and a display label.
+     */
+    private Map<String, Object> datasetView(DatasetSource d, List<ContextRecord> records) {
+        Map<String, Object> view = new LinkedHashMap<>(mapper.convertValue(d, MAP));
+        ContextRecord first = records.stream().filter(r -> r.datasetId().equals(d.datasetId())).findFirst()
+                .orElseThrow();
+        view.put("variable", first.variable());
+        view.put("unit", first.unit());
+        view.put("station_name", first.stationName());
+        view.put("lat", first.lat());
+        view.put("lon", first.lon());
+        view.put("label", label(d.provenance()));
+        return view;
+    }
+
+    static String label(String provenance) {
+        return switch (provenance) {
+            case "organiser" -> "ORGANISER DATA";
+            case "public" -> "PUBLIC DATA";
+            default -> "SIMULATED CONTEXT";
+        };
     }
 
     @GetMapping("/datasets")

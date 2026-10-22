@@ -58,7 +58,30 @@ class ReportExportTest {
                 .andExpect(jsonPath("$.observations").value(6))
                 .andExpect(jsonPath("$.reviewed").value(1))
                 .andExpect(jsonPath("$.path_length_km").isNumber())
+                .andExpect(jsonPath("$.events").value(3))
+                .andExpect(jsonPath("$.until").value("2026-10-24T15:04:00.000Z"))
+                .andExpect(jsonPath("$.period_start").value("2026-10-24T14:22:00.000Z"))
+                .andExpect(jsonPath("$.datasets[0].provenance").value("simulated"))
                 .andExpect(jsonPath("$.simulation_note", containsString("simulated")));
+    }
+
+    @Test
+    void summaryFollowsTheReplayClock() throws Exception {
+        mvc.perform(write("/missions/HACK-001/replay", "{\"action\":\"seek\",\"to\":\"2026-10-24T14:35:00Z\"}"));
+        mvc.perform(get(API + "/missions/HACK-001/report"))
+                .andExpect(jsonPath("$.until").value("2026-10-24T14:35:00.000Z"))
+                .andExpect(jsonPath("$.events").value(1))
+                .andExpect(jsonPath("$.observations").value(2));
+    }
+
+    @Test
+    void contextDatasetsCarryStationAndLabel() throws Exception {
+        mvc.perform(get(API + "/missions/HACK-001/context"))
+                .andExpect(jsonPath("$.datasets[0].lat").isNumber())
+                .andExpect(jsonPath("$.datasets[0].lon").isNumber())
+                .andExpect(jsonPath("$.datasets[0].variable").isString())
+                .andExpect(jsonPath("$.datasets[0].station_name").isString())
+                .andExpect(jsonPath("$.datasets[0].label").value("SIMULATED CONTEXT"));
     }
 
     @Test
