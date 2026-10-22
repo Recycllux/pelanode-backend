@@ -1,1 +1,0 @@
-import{t as e}from"./jsx-runtime-B-hcVAMW.js";import{n as t}from"./AppShell-CGJ8ps_r.js";var n=e();function r(){return(0,n.jsx)(t,{title:`Settings`,text:`Portal preferences and reviewer profile.`})}export{r as component};
