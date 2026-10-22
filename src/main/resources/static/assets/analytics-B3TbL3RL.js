@@ -1,0 +1,1 @@
+import{t as e}from"./jsx-runtime-B-hcVAMW.js";import{n as t}from"./AppShell-CGJ8ps_r.js";var n=e();function r(){return(0,n.jsx)(t,{title:`Analytics`,text:`Trends across missions and review outcomes.`})}export{r as component};

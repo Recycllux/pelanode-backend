@@ -1,0 +1,10 @@
+{
+  "node_id": "PN-MVP-001",
+  "node_type": "simulated",
+  "camera_ids": [
+    "CAM-SURF",
+    "CAM-UW"
+  ],
+  "firmware_version": null,
+  "schema_version": "1.0"
+}

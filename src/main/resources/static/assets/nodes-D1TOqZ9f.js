@@ -1,0 +1,1 @@
+import{t as e}from"./jsx-runtime-B-hcVAMW.js";import{n as t}from"./AppShell-CGJ8ps_r.js";var n=e();function r(){return(0,n.jsx)(t,{title:`Nodes`,text:`Fleet overview of PelaNode devices and their health.`})}export{r as component};

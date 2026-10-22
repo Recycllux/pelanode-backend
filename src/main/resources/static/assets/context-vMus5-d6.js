@@ -1,0 +1,1 @@
+import{t as e}from"./jsx-runtime-B-hcVAMW.js";import{n as t}from"./AppShell-CGJ8ps_r.js";var n=e();function r(){return(0,n.jsx)(t,{title:`Environmental Context`,text:`Browse the datasets associated with missions — discharge, water level and more.`})}export{r as component};

@@ -1,0 +1,19 @@
+{
+  "mission_id": "HACK-001",
+  "name": "Danube high-flow reconnaissance",
+  "scenario": "Post-high-flow reconnaissance, drift replay",
+  "region": "Lower Danube demonstration zone (synthetic)",
+  "node_id": "PN-MVP-001",
+  "mode": "drift",
+  "planned_start": "2026-10-24T14:22:00.000Z",
+  "planned_end": "2026-10-24T15:04:00.000Z",
+  "area_bbox": [
+    25.9,
+    43.88,
+    25.98,
+    43.92
+  ],
+  "event_id_start": 142,
+  "data_origin": "simulated",
+  "schema_version": "1.0"
+}

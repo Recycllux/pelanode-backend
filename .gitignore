@@ -1,10 +1,9 @@
 # build output
-backend/target/
+target/
 **/node_modules/
 dist/
 
 # local runtime data (H2 files, exports)
-backend/.data/
 .data/
 
 # secrets: only config/.env.example is committed
