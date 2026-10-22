@@ -1,7 +1,7 @@
-# pelanode-poc
+# pelanode-backend
 
 PelaNode Intelligence Module, hackathon proof of concept (EIT Water Hackathon, 23–25 Oct 2026).
-One Spring Boot service (API + replay + seed) that will also serve the React UI built in Lovable.
+One Spring Boot service (API + replay + seed) that will also serve the React UI from `Recycllux/pelanode-frontend` (built in Lovable).
 
 Specs: P0-11 (execution plan), P0-12 (replay), P0-13 (data and API contract), P0-17 (runbook).
 Step IDs in commits (S-xx, B-xx, I-xx) refer to the "Plan pas cu pas" document.
