@@ -29,14 +29,17 @@ public class IngestService {
     private static final List<String> IGNORED = List.of("schema_version", "imported_at");
 
     private final MissionRepository missions;
+    private final com.recycllux.pelanode.config.PelanodeProperties props;
     private final TrackRepository track;
     private final ObservationRepository observations;
     private final EventBuilder eventBuilder;
     private final ObjectMapper mapper;
 
     public IngestService(MissionRepository missions, TrackRepository track, ObservationRepository observations,
-                         EventBuilder eventBuilder, ObjectMapper mapper) {
+                         EventBuilder eventBuilder, ObjectMapper mapper,
+                         com.recycllux.pelanode.config.PelanodeProperties props) {
         this.missions = missions;
+        this.props = props;
         this.track = track;
         this.observations = observations;
         this.eventBuilder = eventBuilder;
@@ -45,12 +48,14 @@ public class IngestService {
 
     @Transactional
     public IngestResult trackPoint(TrackPoint p) {
+        rejectLive(p.dataOrigin());
         requireMissionAndNode(p.missionId(), p.nodeId());
         return store(p, track.find(p.trackPointId()), track::insert, "Track point " + p.trackPointId());
     }
 
     @Transactional
     public IngestResult observation(Observation o) {
+        rejectLive(o.dataOrigin());
         requireMissionAndNode(o.missionId(), o.nodeId());
         return store(o, observations.findObservation(o.observationId()), observations::insertObservation,
                 "Observation " + o.observationId());
@@ -58,6 +63,7 @@ public class IngestService {
 
     @Transactional
     public IngestResult deviceStatus(DeviceStatus s) {
+        rejectLive(s.dataOrigin());
         requireMissionAndNode(s.missionId(), s.nodeId());
         return store(s, missions.findStatus(s.statusId()), missions::insertStatus, "Status " + s.statusId());
     }
@@ -76,6 +82,13 @@ public class IngestService {
     }
 
     public record ModelOutputResult(IngestResult result, Optional<String> eventCreated) {
+    }
+
+    /** Simulated data can never be labelled live while PN_SIMULATED_MODE=true (P0-13 section 10). */
+    private void rejectLive(String dataOrigin) {
+        if (props.simulatedMode() && "live".equals(dataOrigin)) {
+            throw ApiException.invalid("data_origin 'live' is not allowed in simulated mode");
+        }
     }
 
     private void requireMissionAndNode(String missionId, String nodeId) {
