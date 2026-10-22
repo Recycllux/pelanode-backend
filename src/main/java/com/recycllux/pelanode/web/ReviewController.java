@@ -5,6 +5,7 @@ import com.recycllux.pelanode.repo.EventRepository;
 import com.recycllux.pelanode.service.ReviewService;
 import java.util.List;
 import java.util.Map;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,15 +17,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/events/{id}")
+@RequiredArgsConstructor
 public class ReviewController {
 
     private final ReviewService reviews;
     private final EventRepository events;
-
-    public ReviewController(ReviewService reviews, EventRepository events) {
-        this.reviews = reviews;
-        this.events = events;
-    }
 
     @PostMapping("/review")
     public ResponseEntity<Map<String, Object>> review(@PathVariable String id, @RequestBody ReviewService.Request r) {

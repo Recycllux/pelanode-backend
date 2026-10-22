@@ -10,12 +10,14 @@ import java.time.Instant;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@RequiredArgsConstructor
 public class ReviewService {
 
     private static final Logger log = LoggerFactory.getLogger(ReviewService.class);
@@ -24,13 +26,6 @@ public class ReviewService {
     private final EventViews views;
     private final Simulator simulator;
     private final PelanodeProperties props;
-
-    public ReviewService(EventRepository events, EventViews views, Simulator simulator, PelanodeProperties props) {
-        this.events = events;
-        this.views = views;
-        this.simulator = simulator;
-        this.props = props;
-    }
 
     public record Request(String action, String newLabel, String note, String reviewer, String requestId) {
     }

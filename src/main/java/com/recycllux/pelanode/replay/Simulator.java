@@ -19,12 +19,14 @@ import java.util.HexFormat;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class Simulator {
 
     private static final Logger log = LoggerFactory.getLogger(Simulator.class);
@@ -41,12 +43,6 @@ public class Simulator {
     private int next;
     private MessageDigest digest;
     private boolean digestLogged;
-
-    public Simulator(DemoPack pack, IngestService ingest, PelanodeProperties props) {
-        this.pack = pack;
-        this.ingest = ingest;
-        this.props = props;
-    }
 
     public synchronized ReplayClock clock() {
         if (clock == null) {

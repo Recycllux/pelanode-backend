@@ -30,12 +30,14 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class ReportService {
 
     private static final Logger log = LoggerFactory.getLogger(ReportService.class);
@@ -53,21 +55,6 @@ public class ReportService {
     private final JdbcTemplate jdbc;
     private final ObjectMapper mapper;
     private final Simulator simulator;
-
-    public ReportService(MissionRepository missions, TrackRepository track, EventRepository events,
-                         ObservationRepository observations, ContextRepository context, EventViews views,
-                         PelanodeProperties props, JdbcTemplate jdbc, ObjectMapper mapper, Simulator simulator) {
-        this.missions = missions;
-        this.track = track;
-        this.events = events;
-        this.observations = observations;
-        this.context = context;
-        this.views = views;
-        this.props = props;
-        this.jdbc = jdbc;
-        this.mapper = mapper;
-        this.simulator = simulator;
-    }
 
     public Map<String, Object> summary(String missionId) {
         Mission m = missions.findMission(missionId).orElseThrow(() -> ApiException.notFound("Mission", missionId));

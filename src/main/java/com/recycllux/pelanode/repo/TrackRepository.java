@@ -8,18 +8,16 @@ import com.recycllux.pelanode.domain.TrackPoint;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 @Repository
+@RequiredArgsConstructor
 public class TrackRepository {
 
     private final JdbcTemplate jdbc;
-
-    public TrackRepository(JdbcTemplate jdbc) {
-        this.jdbc = jdbc;
-    }
 
     private static final RowMapper<TrackPoint> ROW = (rs, i) -> new TrackPoint(
             rs.getString("track_point_id"), rs.getString("mission_id"), rs.getString("node_id"),

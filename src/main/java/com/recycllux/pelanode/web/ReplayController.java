@@ -4,6 +4,7 @@ import com.recycllux.pelanode.config.PelanodeProperties;
 import com.recycllux.pelanode.replay.ReplayClock;
 import com.recycllux.pelanode.replay.Simulator;
 import java.util.Map;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,15 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/missions/{id}/replay")
+@RequiredArgsConstructor
 public class ReplayController {
 
     private final Simulator simulator;
     private final PelanodeProperties props;
-
-    public ReplayController(Simulator simulator, PelanodeProperties props) {
-        this.simulator = simulator;
-        this.props = props;
-    }
 
     public record Command(String action, String to, String speed) {
     }

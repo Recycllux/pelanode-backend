@@ -9,9 +9,11 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class JsonColumns {
 
     private static final TypeReference<List<String>> STRINGS = new TypeReference<>() {};
@@ -19,10 +21,6 @@ public class JsonColumns {
     private static final TypeReference<Map<String, Object>> OBJECT = new TypeReference<>() {};
 
     private final ObjectMapper mapper;
-
-    public JsonColumns(ObjectMapper mapper) {
-        this.mapper = mapper;
-    }
 
     public String write(Object value) {
         if (value == null) {

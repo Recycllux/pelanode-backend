@@ -11,12 +11,14 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class EventBuilder {
 
     private static final Logger log = LoggerFactory.getLogger(EventBuilder.class);
@@ -26,14 +28,6 @@ public class EventBuilder {
     private final ContextAssociator associator;
     private final JdbcTemplate jdbc;
     private final Thresholds thresholds = Thresholds.DEFAULT;
-
-    public EventBuilder(EventRepository events, MissionRepository missions, ContextAssociator associator,
-                        JdbcTemplate jdbc) {
-        this.events = events;
-        this.missions = missions;
-        this.associator = associator;
-        this.jdbc = jdbc;
-    }
 
     public Optional<String> onModelOutput(Observation obs, ModelOutput m) {
         if (m.confidence() < thresholds.candidate()) {

@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1")
+@RequiredArgsConstructor
 public class MissionController {
 
     private static final TypeReference<Map<String, Object>> MAP = new TypeReference<>() {};
@@ -37,15 +39,6 @@ public class MissionController {
     private final JdbcTemplate jdbc;
     private final ObjectMapper mapper;
     private final DemoPack pack;
-
-    public MissionController(MissionRepository missions, ContextRepository context, JdbcTemplate jdbc,
-                             ObjectMapper mapper, DemoPack pack) {
-        this.missions = missions;
-        this.context = context;
-        this.jdbc = jdbc;
-        this.mapper = mapper;
-        this.pack = pack;
-    }
 
     @GetMapping("/missions")
     public List<Mission> list() {

@@ -10,6 +10,7 @@ import com.recycllux.pelanode.repo.MissionRepository;
 import com.recycllux.pelanode.repo.ObservationRepository;
 import java.time.Instant;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 @Component
+@RequiredArgsConstructor
 public class SeedLoader {
 
     private static final Logger log = LoggerFactory.getLogger(SeedLoader.class);
@@ -30,16 +32,6 @@ public class SeedLoader {
     private final ObservationRepository observations;
     private final ContextRepository context;
     private final JdbcTemplate jdbc;
-
-    public SeedLoader(DemoPack pack, PelanodeProperties props, MissionRepository missions,
-                      ObservationRepository observations, ContextRepository context, JdbcTemplate jdbc) {
-        this.pack = pack;
-        this.props = props;
-        this.missions = missions;
-        this.observations = observations;
-        this.context = context;
-        this.jdbc = jdbc;
-    }
 
     @EventListener(ApplicationReadyEvent.class)
     @Order(0)

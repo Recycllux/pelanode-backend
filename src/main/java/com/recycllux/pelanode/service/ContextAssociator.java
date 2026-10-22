@@ -13,20 +13,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class ContextAssociator {
 
     private final ContextRepository context;
     private final EventRepository events;
     private final PelanodeProperties props;
-
-    public ContextAssociator(ContextRepository context, EventRepository events, PelanodeProperties props) {
-        this.context = context;
-        this.events = events;
-        this.props = props;
-    }
 
     private record Rule(String id, double km, Duration window) {
     }

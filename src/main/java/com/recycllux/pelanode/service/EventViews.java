@@ -15,23 +15,17 @@ import com.recycllux.pelanode.web.ApiException;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class EventViews {
 
     private final EventRepository events;
     private final ObservationRepository observations;
     private final ContextRepository context;
     private final MissionRepository missions;
-
-    public EventViews(EventRepository events, ObservationRepository observations, ContextRepository context,
-                      MissionRepository missions) {
-        this.events = events;
-        this.observations = observations;
-        this.context = context;
-        this.missions = missions;
-    }
 
     public Map<String, Object> full(String eventId) {
         EventRecord e = events.findEvent(eventId).orElseThrow(() -> ApiException.notFound("Event", eventId));

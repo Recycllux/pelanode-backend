@@ -1,5 +1,6 @@
 package com.recycllux.pelanode.config;
 
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -9,17 +10,13 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class StartupLog {
 
     private static final Logger log = LoggerFactory.getLogger(StartupLog.class);
 
     private final PelanodeProperties props;
     private final Environment env;
-
-    public StartupLog(PelanodeProperties props, Environment env) {
-        this.props = props;
-        this.env = env;
-    }
 
     @EventListener(ApplicationReadyEvent.class)
     @Order(10)

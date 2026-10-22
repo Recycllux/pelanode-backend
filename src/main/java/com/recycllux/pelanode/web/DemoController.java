@@ -6,6 +6,7 @@ import com.recycllux.pelanode.replay.Simulator;
 import java.time.Instant;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/demo")
+@RequiredArgsConstructor
 public class DemoController {
 
     private static final Logger log = LoggerFactory.getLogger(DemoController.class);
@@ -24,13 +26,6 @@ public class DemoController {
     private final Simulator simulator;
     private final PelanodeProperties props;
     private final JdbcTemplate jdbc;
-
-    public DemoController(SeedLoader seed, Simulator simulator, PelanodeProperties props, JdbcTemplate jdbc) {
-        this.seed = seed;
-        this.simulator = simulator;
-        this.props = props;
-        this.jdbc = jdbc;
-    }
 
     public record ResetRequest(String missionId) {
     }

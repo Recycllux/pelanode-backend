@@ -11,20 +11,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 @Repository
+@RequiredArgsConstructor
 public class ContextRepository {
 
     private final JdbcTemplate jdbc;
     private final JsonColumns json;
-
-    public ContextRepository(JdbcTemplate jdbc, JsonColumns json) {
-        this.jdbc = jdbc;
-        this.json = json;
-    }
 
     private DatasetSource datasetRow(ResultSet rs, int i) throws SQLException {
         return new DatasetSource(

@@ -13,20 +13,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 @Repository
+@RequiredArgsConstructor
 public class MissionRepository {
 
     private final JdbcTemplate jdbc;
     private final JsonColumns json;
-
-    public MissionRepository(JdbcTemplate jdbc, JsonColumns json) {
-        this.jdbc = jdbc;
-        this.json = json;
-    }
 
     private Mission missionRow(ResultSet rs, int i) throws SQLException {
         return new Mission(

@@ -2,6 +2,7 @@ package com.recycllux.pelanode.web;
 
 import com.recycllux.pelanode.service.ReportService;
 import java.util.Map;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,13 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/missions/{id}")
+@RequiredArgsConstructor
 public class ReportController {
 
     private final ReportService reports;
-
-    public ReportController(ReportService reports) {
-        this.reports = reports;
-    }
 
     public record ExportRequest(String format) {
     }

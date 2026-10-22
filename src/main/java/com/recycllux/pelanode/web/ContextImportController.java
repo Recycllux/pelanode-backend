@@ -5,6 +5,7 @@ import com.recycllux.pelanode.domain.DatasetSource;
 import com.recycllux.pelanode.service.ContextImportService;
 import java.util.List;
 import java.util.Map;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,13 +13,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequiredArgsConstructor
 public class ContextImportController {
 
     private final ContextImportService imports;
-
-    public ContextImportController(ContextImportService imports) {
-        this.imports = imports;
-    }
 
     public record ImportRequest(DatasetSource dataset, List<ContextRecord> records, String missionId) {
     }

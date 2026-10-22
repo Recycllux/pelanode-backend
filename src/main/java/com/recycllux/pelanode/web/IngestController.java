@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1")
+@RequiredArgsConstructor
 public class IngestController {
 
     private static final int MAX_BATCH = 1000;
@@ -34,12 +36,6 @@ public class IngestController {
     private final IngestService ingest;
     private final ObjectMapper mapper;
     private final Validator validator;
-
-    public IngestController(IngestService ingest, ObjectMapper mapper, Validator validator) {
-        this.ingest = ingest;
-        this.mapper = mapper;
-        this.validator = validator;
-    }
 
     @PostMapping("/trackpoints")
     public Map<String, Object> trackpoints(@RequestBody JsonNode body) {

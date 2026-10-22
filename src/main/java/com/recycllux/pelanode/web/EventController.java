@@ -10,6 +10,7 @@ import java.time.Instant;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,20 +19,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1")
+@RequiredArgsConstructor
 public class EventController {
 
     private final TrackRepository track;
     private final EventRepository events;
     private final MissionRepository missions;
     private final EventViews views;
-
-    public EventController(TrackRepository track, EventRepository events, MissionRepository missions,
-                           EventViews views) {
-        this.track = track;
-        this.events = events;
-        this.missions = missions;
-        this.views = views;
-    }
 
     @GetMapping("/missions/{id}/track")
     public Object track(@PathVariable String id,

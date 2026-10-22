@@ -11,12 +11,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@RequiredArgsConstructor
 public class ContextImportService {
 
     private static final Logger log = LoggerFactory.getLogger(ContextImportService.class);
@@ -26,12 +28,6 @@ public class ContextImportService {
     private final ContextRepository context;
     private final ContextAssociator associator;
     private final PelanodeProperties props;
-
-    public ContextImportService(ContextRepository context, ContextAssociator associator, PelanodeProperties props) {
-        this.context = context;
-        this.associator = associator;
-        this.props = props;
-    }
 
     @Transactional
     public Map<String, Object> importDataset(DatasetSource dataset, List<ContextRecord> records, String missionId) {

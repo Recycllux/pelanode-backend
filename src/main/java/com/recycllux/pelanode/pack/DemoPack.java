@@ -18,18 +18,15 @@ import java.nio.file.Files;
 import com.recycllux.pelanode.config.DataPaths;
 import java.nio.file.Path;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class DemoPack {
 
     private final ObjectMapper mapper;
     private final PelanodeProperties props;
-
-    public DemoPack(ObjectMapper mapper, PelanodeProperties props) {
-        this.mapper = mapper;
-        this.props = props;
-    }
 
     public Path dir() {
         return DataPaths.resolve(props.demoPackDir());

@@ -14,10 +14,12 @@ import com.recycllux.pelanode.web.ApiException;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@RequiredArgsConstructor
 public class IngestService {
 
     private static final List<String> IGNORED = List.of("schema_version", "imported_at");
@@ -28,17 +30,6 @@ public class IngestService {
     private final ObservationRepository observations;
     private final EventBuilder eventBuilder;
     private final ObjectMapper mapper;
-
-    public IngestService(MissionRepository missions, TrackRepository track, ObservationRepository observations,
-                         EventBuilder eventBuilder, ObjectMapper mapper,
-                         com.recycllux.pelanode.config.PelanodeProperties props) {
-        this.missions = missions;
-        this.props = props;
-        this.track = track;
-        this.observations = observations;
-        this.eventBuilder = eventBuilder;
-        this.mapper = mapper;
-    }
 
     @Transactional
     public IngestResult trackPoint(TrackPoint p) {
