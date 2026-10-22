@@ -2,7 +2,6 @@ package com.recycllux.pelanode.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-/** Typed view of the PN_* settings (P0-11 section 7). */
 @ConfigurationProperties(prefix = "pelanode")
 public record PelanodeProperties(
         String demoPackDir,

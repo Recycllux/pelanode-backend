@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-/** Step B-16: mission summary and exports. */
 @RestController
 @RequestMapping("/api/v1/missions/{id}")
 public class ReportController {

@@ -20,10 +20,6 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
-/**
- * B-07..B-14 together: replay the HACK-001 pack and check the storyboard outcome
- * (P0-11 section 11 steps 1-8) through the HTTP API only.
- */
 @SpringBootTest
 @AutoConfigureMockMvc
 @DirtiesContext
@@ -74,7 +70,6 @@ class ReplayEndToEndTest {
                 .andExpect(jsonPath("$[2].event_id").value("EV-0144"))
                 .andExpect(jsonPath("$[2].attention").value("review_required"));
 
-        // Backward seek deletes nothing: reads are cut with until.
         mvc.perform(write("/missions/HACK-001/replay", "{\"action\":\"seek\",\"to\":\"2026-10-24T14:22:00Z\"}"));
         mvc.perform(get(API + "/events").param("mission_id", "HACK-001")).andExpect(jsonPath("$", hasSize(3)));
 

@@ -8,7 +8,6 @@ import jakarta.validation.constraints.NotNull;
 import java.time.Instant;
 import java.util.List;
 
-/** One interpretation of one observation. Immutable once stored. */
 public record ModelOutput(
         @NotBlank String modelOutputId,
         @NotBlank String observationId,

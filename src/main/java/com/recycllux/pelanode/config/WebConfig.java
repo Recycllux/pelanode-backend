@@ -10,11 +10,6 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.resource.PathResourceResolver;
 
-/**
- * Step B-15. Serves media from PN_MEDIA_ROOT, exports from PN_EXPORT_DIR, and the UI
- * bundle from classpath:/static with an index.html fallback so deep links such as
- * /events/EV-0143 work after a page reload. API paths never fall back to the UI.
- */
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 

@@ -23,12 +23,6 @@ import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
-/**
- * The storyboard on a real PostgreSQL: Liquibase schema, seed, replay, events with context, review,
- * report, export and context import. Runs only when PN_TEST_PG_URL is set, e.g.
- * PN_TEST_PG_URL=jdbc:postgresql://localhost:5432/pelanode_test PN_TEST_PG_USER=postgres ./mvnw test
- * The test database is wiped first: never point it at a database you want to keep.
- */
 @SpringBootTest
 @AutoConfigureMockMvc
 @DirtiesContext
@@ -90,7 +84,6 @@ class PostgresIntegrationTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.imported").value(1));
 
-        // Reset twice in a row on the same database: the demo must come back clean every time.
         mvc.perform(write("/demo/reset", "{\"mission_id\":\"HACK-001\"}"))
                 .andExpect(jsonPath("$.counts.event").value(0));
         mvc.perform(write("/demo/reset", "{\"mission_id\":\"HACK-001\"}"))

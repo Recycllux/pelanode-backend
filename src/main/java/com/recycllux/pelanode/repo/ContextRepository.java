@@ -15,7 +15,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-/** External dataset registry and context records. */
 @Repository
 public class ContextRepository {
 
@@ -77,7 +76,6 @@ public class ContextRepository {
                 .stream().findFirst();
     }
 
-    /** Records observed between {@code from} and {@code to}, optionally for one variable. */
     public List<ContextRecord> findRecords(Instant from, Instant to, String variable) {
         if (variable == null) {
             return jdbc.query("""

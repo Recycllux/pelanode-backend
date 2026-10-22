@@ -17,10 +17,6 @@ import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilde
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-/**
- * Time rule (P0-13 section 9): accept ISO 8601 with Z or an explicit offset, store and return UTC
- * with milliseconds and Z. A timestamp without an offset is rejected, never guessed.
- */
 @Configuration
 public class JsonConfig {
 

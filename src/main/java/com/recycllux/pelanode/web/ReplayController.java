@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-/** Step B-07: replay state and control. Only the demo mission has a clock in H0. */
 @RestController
 @RequestMapping("/api/v1/missions/{id}/replay")
 public class ReplayController {

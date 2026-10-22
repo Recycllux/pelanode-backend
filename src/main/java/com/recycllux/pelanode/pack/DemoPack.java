@@ -20,10 +20,6 @@ import java.nio.file.Path;
 import java.util.List;
 import org.springframework.stereotype.Component;
 
-/**
- * The demo pack read from PN_DEMO_PACK_DIR. Never edited by the app (P0-11 section 4).
- * Static parts are seeded into the DB; timed parts are fed by the simulator during replay.
- */
 @Component
 public class DemoPack {
 
@@ -71,7 +67,6 @@ public class DemoPack {
         return readOptional("device_status.json", new TypeReference<>() {});
     }
 
-    /** Precomputed or simulated inference; PN_AI_OUTPUTS_FILE overrides the pack file. */
     public List<ModelOutput> modelOutputs() {
         if (props.aiOutputsFile() != null && !props.aiOutputsFile().isBlank()) {
             return readPath(DataPaths.resolve(props.aiOutputsFile()), new TypeReference<>() {});

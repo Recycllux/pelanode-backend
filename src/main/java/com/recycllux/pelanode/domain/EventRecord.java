@@ -3,7 +3,6 @@ package com.recycllux.pelanode.domain;
 import java.time.Instant;
 import java.util.List;
 
-/** The stored event row. The API read view is built from it in EventView. */
 public record EventRecord(
         String eventId,
         String missionId,

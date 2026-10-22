@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-/** Step B-12: review endpoints. */
 @RestController
 @RequestMapping("/api/v1/events/{id}")
 public class ReviewController {

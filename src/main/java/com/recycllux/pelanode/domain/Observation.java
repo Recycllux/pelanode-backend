@@ -8,7 +8,6 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 
-/** Primary evidence. No AI field may appear here (P0-13 section 2). */
 public record Observation(
         @NotBlank String observationId,
         @NotBlank String missionId,

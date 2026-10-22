@@ -12,7 +12,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-/** Track points. Reads always sort by captured_at, never by arrival (P0-13 section 9). */
 @Repository
 public class TrackRepository {
 
@@ -41,7 +40,6 @@ public class TrackRepository {
         return jdbc.query("SELECT * FROM track_point WHERE track_point_id = ?", ROW, id).stream().findFirst();
     }
 
-    /** Track of a mission up to {@code until} inclusive (null = whole track). */
     public List<TrackPoint> findByMission(String missionId, Instant until) {
         if (until == null) {
             return jdbc.query("SELECT * FROM track_point WHERE mission_id = ? ORDER BY captured_at", ROW, missionId);

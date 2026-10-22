@@ -5,10 +5,6 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-/**
- * One switch for the database: PN_DB_URL. H2 (the default, and the tests) runs in PostgreSQL
- * mode so the same SQL works on both; PostgreSQL URLs are used as given.
- */
 @Configuration
 public class DatabaseConfig {
 

@@ -2,7 +2,6 @@ package com.recycllux.pelanode.domain;
 
 import java.time.Instant;
 
-/** Append-only human decision. */
 public record ReviewAction(
         String reviewId,
         String eventId,
@@ -13,7 +12,6 @@ public record ReviewAction(
         String requestId,
         String resultingStatus,
         Instant createdAt,
-        /** Replay mission time when the review was made; null outside a replayed mission. */
         Instant missionTime,
         String schemaVersion) {
 }

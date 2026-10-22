@@ -8,7 +8,6 @@ import org.springframework.core.annotation.Order;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
-/** One structured line after seeding, so the runbook (P0-17) can check the mode at a glance. */
 @Component
 public class StartupLog {
 

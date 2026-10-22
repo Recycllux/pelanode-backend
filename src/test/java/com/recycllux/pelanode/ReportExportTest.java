@@ -21,7 +21,6 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
-/** B-16: report summary and the four export formats, after a full replay. */
 @SpringBootTest
 @AutoConfigureMockMvc
 @DirtiesContext

@@ -15,12 +15,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
-/**
- * Step B-11. Associates context with an event (P0-03 section 6.2, P0-13):
- * discharge and level within 25 km and 6 h, temperature within 50 km and 24 h.
- * Per dataset only the record closest in time is kept. The relation is always
- * coincides_with: context never explains or causes an event.
- */
 @Service
 public class ContextAssociator {
 
@@ -53,7 +47,6 @@ public class ContextAssociator {
         return Duration.ofMinutes(Math.round(h * 60));
     }
 
-    /** Recomputes the associations of one event; returns how many were stored. */
     public int associate(EventRecord event) {
         events.deleteContext(event.eventId());
         if (event.lat() == null || event.lon() == null) {
@@ -91,7 +84,6 @@ public class ContextAssociator {
                 && Geo.km(e.lat(), e.lon(), r.lat(), r.lon()) <= rule.km();
     }
 
-    /** Re-runs association for every event of a mission (after a context import). */
     public int reassociateMission(String missionId) {
         return (int) events.findByMission(missionId, null).stream().filter(e -> associate(e) > 0).count();
     }

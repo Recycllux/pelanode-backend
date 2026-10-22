@@ -4,7 +4,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.time.Instant;
 
-/** A health message from the node (simulated in H0). */
 public record DeviceStatus(
         @NotBlank String statusId,
         @NotBlank String nodeId,

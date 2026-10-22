@@ -2,7 +2,6 @@ package com.recycllux.pelanode.domain;
 
 import jakarta.validation.constraints.NotBlank;
 
-/** A frame, thumbnail, crop or clip. */
 public record MediaAsset(
         @NotBlank String mediaId,
         @NotBlank String observationId,

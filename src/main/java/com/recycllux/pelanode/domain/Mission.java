@@ -5,7 +5,6 @@ import jakarta.validation.constraints.NotNull;
 import java.time.Instant;
 import java.util.List;
 
-/** A bounded deployment (P0-13 section 1). */
 public record Mission(
         @NotBlank String missionId,
         @NotBlank String name,

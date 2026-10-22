@@ -17,15 +17,9 @@ import java.util.function.Consumer;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * Step B-06. The single write path for node data, used by the REST API and by the
- * simulator alike (P0-12). Duplicate rule (P0-13 section 9): same ID and same body
- * returns the stored record and creates nothing; same ID with a different body is 409.
- */
 @Service
 public class IngestService {
 
-    /** Server-managed fields that may differ between two otherwise identical bodies. */
     private static final List<String> IGNORED = List.of("schema_version", "imported_at");
 
     private final MissionRepository missions;
@@ -68,7 +62,6 @@ public class IngestService {
         return store(s, missions.findStatus(s.statusId()), missions::insertStatus, "Status " + s.statusId());
     }
 
-    /** Stores a model output and runs the event builder; returns the event created, if any. */
     @Transactional
     public ModelOutputResult modelOutput(ModelOutput m) {
         Observation obs = observations.findObservation(m.observationId())
@@ -84,7 +77,6 @@ public class IngestService {
     public record ModelOutputResult(IngestResult result, Optional<String> eventCreated) {
     }
 
-    /** Simulated data can never be labelled live while PN_SIMULATED_MODE=true (P0-13 section 10). */
     private void rejectLive(String dataOrigin) {
         if (props.simulatedMode() && "live".equals(dataOrigin)) {
             throw ApiException.invalid("data_origin 'live' is not allowed in simulated mode");

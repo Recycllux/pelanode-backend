@@ -28,7 +28,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
-/** B-02: every table can store and read back one row with the P0-13 example values. */
 @SpringBootTest
 @Transactional
 @TestPropertySource(properties = {"PN_DB_URL=jdbc:h2:mem:roundtrip", "PN_SEED_ON_STARTUP=false"})

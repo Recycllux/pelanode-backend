@@ -15,11 +15,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * Step B-12. Append-only human review (P0-13 section 6). The event's review status and
- * current label change; the model output and the observation never do.
- * Idempotent on the client request_id.
- */
 @Service
 public class ReviewService {
 
@@ -65,7 +60,6 @@ public class ReviewService {
         switch (r.action() == null ? "" : r.action()) {
             case "confirm" -> {
                 status = "confirmed";
-                // Confirming accepts the model's class unless a reviewer already relabelled it.
                 if (label == null) {
                     label = event.eventType();
                 }

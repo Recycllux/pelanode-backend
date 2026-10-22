@@ -35,11 +35,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
-/**
- * Step B-16. Mission summary and the four export formats (P0-13 section 11).
- * Every export carries a simulation note built from the data itself, so it can
- * never claim something is real that is not.
- */
 @Service
 public class ReportService {
 
@@ -74,13 +69,8 @@ public class ReportService {
         this.simulator = simulator;
     }
 
-    /**
-     * The P0-13 summary. A few extra fields (name, counts, path_length_km, model_versions)
-     * are added for the UI's Reports screen; additive fields stay in /api/v1.
-     */
     public Map<String, Object> summary(String missionId) {
         Mission m = missions.findMission(missionId).orElseThrow(() -> ApiException.notFound("Mission", missionId));
-        // Like the UI, the summary covers data up to the replay's mission time (seek deletes nothing).
         Instant until = missionId.equals(props.demoMissionId()) ? simulator.clock().missionTime() : m.plannedEnd();
         List<EventRecord> list = events.findByMission(missionId, until);
         List<TrackPoint> points = track.findByMission(missionId, until);
@@ -128,7 +118,6 @@ public class ReportService {
         return s;
     }
 
-    /** Writes one export file and records it; each call writes a new file (not idempotent). */
     public Map<String, Object> export(String missionId, String format) {
         Map<String, Object> summary = summary(missionId);
         String stamp = JsonConfig.UTC_MILLIS.format(Instant.now()).replaceAll("[-:.]", "");
@@ -173,8 +162,6 @@ public class ReportService {
         report.put("generated_at", now);
         return report;
     }
-
-    // ---------------------------------------------------------------- formats
 
     private List<Map<String, Object>> rows(String missionId) {
         List<Map<String, Object>> rows = new ArrayList<>();
@@ -312,8 +299,6 @@ public class ReportService {
                 esc(s.get("model_versions")), esc(s.get("generated_at")));
     }
 
-    // ---------------------------------------------------------------- helpers
-
     private static double pathKm(List<TrackPoint> points) {
         double km = 0;
         for (int i = 1; i < points.size(); i++) {
@@ -347,7 +332,6 @@ public class ReportService {
         return List.copyOf(out.values());
     }
 
-    /** Names every simulated or replayed layer, derived from the stored data. */
     private String simulationNote(List<EventRecord> list, List<TrackPoint> points) {
         List<String> parts = new ArrayList<>();
         Set<String> trackOrigins = points.stream().map(TrackPoint::dataOrigin).collect(Collectors.toSet());

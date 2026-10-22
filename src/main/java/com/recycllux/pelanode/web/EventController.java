@@ -16,10 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-/**
- * Step B-08: reads cut at a mission time. A backward seek deletes nothing; the UI
- * passes until = mission_time and sees only what had happened by then (P0-12).
- */
 @RestController
 @RequestMapping("/api/v1")
 public class EventController {
@@ -80,7 +76,6 @@ public class EventController {
         return until == null || until.isBlank() ? null : MissionController.parse(until);
     }
 
-    /** Minimal GeoJSON writers (RFC 7946: coordinates are [lon, lat]). */
     static final class Geojson {
 
         private Geojson() {

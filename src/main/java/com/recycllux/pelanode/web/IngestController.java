@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-/** Step B-06: write endpoints for node data (P0-13 section 8). */
 @RestController
 @RequestMapping("/api/v1")
 public class IngestController {
@@ -42,7 +41,6 @@ public class IngestController {
         this.validator = validator;
     }
 
-    /** One track point or an array of up to 1,000. */
     @PostMapping("/trackpoints")
     public Map<String, Object> trackpoints(@RequestBody JsonNode body) {
         int accepted = 0;
@@ -83,7 +81,6 @@ public class IngestController {
         return ResponseEntity.status(r == IngestResult.CREATED ? HttpStatus.CREATED : HttpStatus.OK).body(s);
     }
 
-    /** One model output or an array; each one runs the event builder. */
     @PostMapping("/model-outputs")
     public Map<String, Object> modelOutputs(@RequestBody JsonNode body) {
         int accepted = 0;

@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
-/** Maps errors to 404 / 409 / 422 with a small JSON body. */
 @RestControllerAdvice
 public class ApiErrorHandler {
 
@@ -29,7 +28,6 @@ public class ApiErrorHandler {
         return body(HttpStatus.UNPROCESSABLE_ENTITY, detail);
     }
 
-    /** Malformed JSON, wrong types, and timestamps without an offset all land here. */
     @ExceptionHandler(HttpMessageNotReadableException.class)
     ResponseEntity<Map<String, Object>> unreadable(HttpMessageNotReadableException e) {
         Throwable root = e.getMostSpecificCause();

@@ -1,5 +1,3 @@
-# Liquibase changelog. Each change is a plain SQL file that runs on H2 (PostgreSQL mode) and on
-# PostgreSQL. Never edit a changeset that has run: add a new file and a new changeSet below it.
 databaseChangeLog:
   - changeSet:
       id: 001-init

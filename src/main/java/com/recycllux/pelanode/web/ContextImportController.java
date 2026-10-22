@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-/** Step B-17: POST /context/import, e.g. the organiser's hydrology data during the hackathon. */
 @RestController
 public class ContextImportController {
 

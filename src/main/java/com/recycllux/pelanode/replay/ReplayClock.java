@@ -9,11 +9,6 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * Step B-07. One mission clock (P0-12): idle -> running <-> paused -> ended.
- * mission_time = anchor + (wall time since anchor) x speed while running.
- * Speeds 1, 2, 5 and 100 ("demo": 42 minutes in about 25 s).
- */
 public class ReplayClock {
 
     private static final Logger log = LoggerFactory.getLogger(ReplayClock.class);
@@ -98,7 +93,6 @@ public class ReplayClock {
         run();
     }
 
-    /** Seek never deletes data; it only moves the cut-off the UI reads with. */
     public synchronized void seek(Instant to) {
         if (to.isBefore(missionStart) || to.isAfter(missionEnd)) {
             throw ApiException.invalid("seek target must be inside the mission window");

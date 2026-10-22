@@ -12,11 +12,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-/**
- * Step B-13. Every POST under /api requires header X-PN-Key = PN_WRITE_API_KEY
- * (P0-11 section 9). Reads stay open for the jury. With no key configured, writes
- * are open and a warning is logged: acceptable on a developer laptop only.
- */
 @Component
 public class WriteKeyFilter extends OncePerRequestFilter {
 

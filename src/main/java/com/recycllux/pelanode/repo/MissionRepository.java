@@ -17,7 +17,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-/** Missions, nodes and device status. */
 @Repository
 public class MissionRepository {
 
@@ -98,7 +97,6 @@ public class MissionRepository {
                 .stream().findFirst();
     }
 
-    /** Latest status at or before {@code until} (null = latest overall). */
     public Optional<DeviceStatus> latestStatus(String nodeId, String missionId, Instant until) {
         if (until == null) {
             return jdbc.query("""

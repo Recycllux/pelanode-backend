@@ -16,12 +16,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
-/**
- * Step B-09. Turns a model output into an event (P0-13 section 4, P0-15 rules):
- * below the candidate threshold nothing happens; a repeat of the same class and
- * perspective within 30 s and 50 m becomes supporting evidence of the earlier event;
- * otherwise a new event gets the next number from the mission's event_id_start.
- */
 @Service
 public class EventBuilder {
 

@@ -16,10 +16,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * Step B-17: imports one external dataset (typically the organiser's data, provenance "organiser")
- * and re-runs the context association for the mission. Context never overwrites node data.
- */
 @Service
 public class ContextImportService {
 
@@ -90,7 +86,6 @@ public class ContextImportService {
         return out;
     }
 
-    /** Fills the fields the importer may leave out and checks the ones the contract requires. */
     private static ContextRecord normalise(DatasetSource d, ContextRecord r, int index) {
         String where = "records[" + index + "]";
         if (r == null) {

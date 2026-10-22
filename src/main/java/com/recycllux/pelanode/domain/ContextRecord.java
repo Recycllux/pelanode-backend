@@ -4,7 +4,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.time.Instant;
 
-/** One external value. Never overwrites node data. */
 public record ContextRecord(
         @NotBlank String contextRecordId,
         @NotBlank String datasetId,

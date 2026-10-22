@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 import org.springframework.stereotype.Component;
 
-/** Arrays and objects are stored as JSON text (P0-13 section 7); timestamps as UTC. */
 @Component
 public class JsonColumns {
 

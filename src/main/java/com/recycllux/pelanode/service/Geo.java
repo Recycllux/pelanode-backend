@@ -1,6 +1,5 @@
 package com.recycllux.pelanode.service;
 
-/** Haversine distance; earth radius 6,371 km (P0-13 section 7, geospatial approach). */
 public final class Geo {
 
     private static final double EARTH_KM = 6371.0;

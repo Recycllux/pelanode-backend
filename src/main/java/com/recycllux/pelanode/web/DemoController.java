@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-/** Step B-14: back to the start state in seconds (P0-17 section 9). Safe to repeat. */
 @RestController
 @RequestMapping("/api/v1/demo")
 public class DemoController {

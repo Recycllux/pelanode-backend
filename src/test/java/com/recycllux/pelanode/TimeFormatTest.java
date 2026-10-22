@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
-/** B-03: snake_case JSON, UTC with milliseconds, offsets converted, no offset rejected. */
 @SpringBootTest
 @TestPropertySource(properties = "PN_DB_URL=jdbc:h2:mem:timefmt")
 class TimeFormatTest {

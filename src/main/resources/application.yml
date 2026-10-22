@@ -1,18 +1,10 @@
-# All settings come from PN_* environment variables (P0-11 section 7).
-# Defaults work for a local run (IDE or mvnw) without any setting: relative data paths are
-# looked up from the working directory upwards (DataPaths), so the repository root or any sub-folder works.
-
 spring:
   application:
     name: pelanode-poc
-  # Local settings without exporting variables: PN_* keys in config/.env (git-ignored) are read here.
   config:
     import: optional:file:./config/.env[.properties]
   profiles:
     active: ${SPRING_PROFILES_ACTIVE:local}
-  # Database: embedded H2 by default (no setup). PostgreSQL by setting PN_DB_URL to a
-  # jdbc:postgresql:// URL plus PN_DB_USER / PN_DB_PASSWORD. H2 URLs get the PostgreSQL
-  # compatibility options appended automatically (DatabaseConfig).
   datasource:
     url: ${PN_DB_URL:jdbc:h2:file:./.data/pelanode}
     username: ${PN_DB_USER:sa}
@@ -83,7 +75,5 @@ spring:
   config:
     activate:
       on-profile: cloud
-# Cloud Run has no persistent disk; only /tmp is writable (P0-17 P17-03).
-# A container restart therefore equals a reset.
 pelanode:
   export-dir: ${PN_EXPORT_DIR:/tmp/exports}

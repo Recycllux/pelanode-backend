@@ -19,11 +19,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * Step B-04. Loads the static part of the pack in the P0-17 section 5 order:
- * mission, node, media registry, context. Track, observations and model outputs
- * are not loaded here; the simulator feeds them during replay (P0-12).
- */
 @Component
 public class SeedLoader {
 
@@ -46,7 +41,6 @@ public class SeedLoader {
         this.jdbc = jdbc;
     }
 
-    /** Startup reseed only when the DB has no demo mission (P0-12 section 2.5). */
     @EventListener(ApplicationReadyEvent.class)
     @Order(0)
     public void seedOnStartup() {
@@ -82,10 +76,6 @@ public class SeedLoader {
                 mission.missionId(), mission.nodeId(), media.size(), datasets.size(), records.size());
     }
 
-    /**
-     * Clears everything the mission produced, in foreign-key order. Context records and
-     * datasets stay: they are not mission data and organiser imports must survive a reset.
-     */
     @Transactional
     public void clearMission(String missionId) {
         jdbc.update("DELETE FROM review_action WHERE event_id IN (SELECT event_id FROM event WHERE mission_id = ?)", missionId);

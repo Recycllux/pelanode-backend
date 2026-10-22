@@ -17,11 +17,6 @@ import java.util.List;
 import java.util.Map;
 import org.springframework.stereotype.Service;
 
-/**
- * Builds the API read views of an event. The full view keeps observation, model output,
- * context and review as separate blocks (P0-03 section 4.1, P0-13 section 12): the
- * original model output is never replaced by a review.
- */
 @Service
 public class EventViews {
 
@@ -64,7 +59,6 @@ public class EventViews {
         return v;
     }
 
-    /** Summary view for lists and the map. */
     public Map<String, Object> summary(EventRecord e) {
         Map<String, Object> v = header(e);
         ModelOutput mo = observations.findModelOutput(e.modelOutputId()).orElseThrow();

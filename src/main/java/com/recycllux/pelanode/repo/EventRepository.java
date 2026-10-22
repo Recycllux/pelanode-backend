@@ -16,7 +16,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-/** Events, their context associations and review history. */
 @Repository
 public class EventRepository {
 
@@ -66,7 +65,6 @@ public class EventRepository {
         return jdbc.query("SELECT * FROM event WHERE event_id = ?", this::eventRow, eventId).stream().findFirst();
     }
 
-    /** Events of a mission up to {@code until} inclusive (null = all). */
     public List<EventRecord> findByMission(String missionId, Instant until) {
         if (until == null) {
             return jdbc.query("SELECT * FROM event WHERE mission_id = ? ORDER BY captured_at", this::eventRow, missionId);
@@ -90,7 +88,6 @@ public class EventRepository {
                 c.ruleId(), ts(c.associatedAt()));
     }
 
-    /** Associations are recomputed as a whole, so the old set is dropped first. */
     public void deleteContext(String eventId) {
         jdbc.update("DELETE FROM event_context WHERE event_id = ?", eventId);
     }

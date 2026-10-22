@@ -16,7 +16,6 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
-/** B-17: importing organiser data re-runs the association, and the label stays "organiser". */
 @SpringBootTest
 @AutoConfigureMockMvc
 @DirtiesContext
@@ -59,7 +58,6 @@ class ContextImportTest {
                 .andExpect(jsonPath("$.context[*].relation", hasItem("coincides_with")));
         mvc.perform(get(API + "/datasets")).andExpect(jsonPath("$[*].dataset_id", hasItem("org_hydro_ruse")));
 
-        // Same record again: idempotent. Same id with another value: conflict.
         mvc.perform(write("/context/import", body)).andExpect(jsonPath("$.unchanged").value(1));
         mvc.perform(write("/context/import", body.replace("1190.0", "999.0"))).andExpect(status().isConflict());
     }

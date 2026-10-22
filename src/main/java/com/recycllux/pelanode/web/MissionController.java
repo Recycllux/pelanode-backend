@@ -25,13 +25,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-/** Step B-05: read endpoints that do not depend on the replay clock. */
 @RestController
 @RequestMapping("/api/v1")
 public class MissionController {
 
     private static final TypeReference<Map<String, Object>> MAP = new TypeReference<>() {};
-    /** Default context window around the mission: wide enough for the 24 h temperature rule. */
     private static final Duration CONTEXT_MARGIN = Duration.ofHours(24);
 
     private final MissionRepository missions;
@@ -54,7 +52,6 @@ public class MissionController {
         return missions.findAllMissions();
     }
 
-    /** One mission with its node and counts (P0-13 section 8). */
     @GetMapping("/missions/{id}")
     public Map<String, Object> get(@PathVariable String id) {
         Mission mission = missions.findMission(id).orElseThrow(() -> ApiException.notFound("Mission", id));
@@ -82,7 +79,6 @@ public class MissionController {
         return n == null ? 0 : n;
     }
 
-    /** Context records for the mission window, grouped by the datasets they come from. */
     @GetMapping("/missions/{id}/context")
     public Map<String, Object> context(@PathVariable String id,
                                        @RequestParam(required = false) String variable,
@@ -102,10 +98,6 @@ public class MissionController {
         return body;
     }
 
-    /**
-     * The registry entry plus what the UI's map and chart need for one station: variable, unit,
-     * station name and position (from the dataset's first record) and a display label.
-     */
     private Map<String, Object> datasetView(DatasetSource d, List<ContextRecord> records) {
         Map<String, Object> view = new LinkedHashMap<>(mapper.convertValue(d, MAP));
         ContextRecord first = records.stream().filter(r -> r.datasetId().equals(d.datasetId())).findFirst()
@@ -132,10 +124,6 @@ public class MissionController {
         return context.findAllDatasets();
     }
 
-    /**
-     * Latest device status for the node in a mission. Before the replay has sent any status
-     * (state idle), the first status of the demo pack stands in, so the UI has values to show.
-     */
     @GetMapping("/nodes/{id}/status")
     public DeviceStatus status(@PathVariable String id, @RequestParam("mission_id") String missionId) {
         return missions.latestStatus(id, missionId, null)

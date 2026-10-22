@@ -24,12 +24,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-/**
- * Step B-10. Feeds the timed part of the pack through IngestService, in process, as
- * the replay clock passes each record's time (P0-12). The order is fixed: by time,
- * then status, track point, observation, model output, then ID. Each record is sent
- * once per run; a backward seek sends nothing again and deletes nothing.
- */
 @Component
 public class Simulator {
 
@@ -64,7 +58,6 @@ public class Simulator {
         return clock;
     }
 
-    /** Back to the first record: used by reset, after the mission data is cleared. */
     public synchronized void rewind() {
         timeline = buildTimeline();
         next = 0;
@@ -79,7 +72,6 @@ public class Simulator {
         }
     }
 
-    /** Sends every record due by {@code t}; returns how many were sent. */
     public synchronized int emitUpTo(Instant t) {
         int sent = 0;
         while (next < timeline.size() && !timeline.get(next).at().isAfter(t)) {
@@ -100,7 +92,6 @@ public class Simulator {
         return sent;
     }
 
-    /** SHA-256 of the IDs sent so far, in order; equal across full runs means identical replays. */
     public synchronized String digest() {
         try {
             return HexFormat.of().formatHex(((MessageDigest) digest.clone()).digest());

@@ -16,7 +16,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-/** Observations, their media and the model outputs that interpret them. */
 @Repository
 public class ObservationRepository {
 

@@ -12,7 +12,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
-/** B-04 + B-05: the pack seeds at startup and the read endpoints return P0-13 shapes. */
 @SpringBootTest
 @AutoConfigureMockMvc
 @TestPropertySource(properties = {"PN_DB_URL=jdbc:h2:mem:seedread"})

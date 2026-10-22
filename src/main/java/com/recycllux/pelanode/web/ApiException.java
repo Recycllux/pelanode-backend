@@ -2,7 +2,6 @@ package com.recycllux.pelanode.web;
 
 import org.springframework.http.HttpStatus;
 
-/** An error with the HTTP status the contract prescribes (P0-13 section 8). */
 public class ApiException extends RuntimeException {
 
     private final HttpStatus status;
