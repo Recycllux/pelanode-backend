@@ -19,9 +19,6 @@ public class ReportController {
 
     private final ReportService reports;
 
-    public record ExportRequest(String format) {
-    }
-
     @GetMapping("/report")
     public Map<String, Object> summary(@PathVariable String id) {
         return reports.summary(id);
@@ -29,10 +26,7 @@ public class ReportController {
 
     @PostMapping("/export")
     @ResponseStatus(HttpStatus.CREATED)
-    public Map<String, Object> export(@PathVariable String id, @RequestBody ExportRequest req) {
-        if (req == null || req.format() == null) {
-            throw ApiException.invalid("format is required");
-        }
-        return reports.export(id, req.format());
+    public Map<String, Object> export(@PathVariable String id, @RequestBody(required = false) ReportService.ExportRequest req) {
+        return reports.export(id, req);
     }
 }

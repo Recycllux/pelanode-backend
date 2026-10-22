@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class DatabaseConfig {
 
-    static final String H2_OPTIONS = ";MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;DEFAULT_NULL_ORDERING=HIGH";
+    static final String H2_OPTIONS = ";MODE=PostgreSQL;DEFAULT_NULL_ORDERING=HIGH";
 
     static String withH2Options(String url) {
         if (url == null || !url.startsWith("jdbc:h2:") || url.toUpperCase().contains(";MODE=")) {

@@ -8,6 +8,7 @@ import com.recycllux.pelanode.replay.Simulator;
 import com.recycllux.pelanode.web.ApiException;
 import java.time.Instant;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,11 @@ public class ReviewService {
     }
 
     public record Outcome(boolean created, Map<String, Object> body) {
+    }
+
+    public List<ReviewAction> history(String eventId) {
+        events.findEvent(eventId).orElseThrow(() -> ApiException.notFound("Event", eventId));
+        return events.findReviews(eventId);
     }
 
     @Transactional

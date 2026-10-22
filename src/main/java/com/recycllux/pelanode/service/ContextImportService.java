@@ -30,6 +30,16 @@ public class ContextImportService {
     private final PelanodeProperties props;
 
     @Transactional
+    public record Request(DatasetSource dataset, List<ContextRecord> records, String missionId) {
+    }
+
+    public Map<String, Object> importDataset(Request req) {
+        if (req == null) {
+            throw ApiException.invalid("body is required");
+        }
+        return importDataset(req.dataset(), req.records(), req.missionId());
+    }
+
     public Map<String, Object> importDataset(DatasetSource dataset, List<ContextRecord> records, String missionId) {
         if (dataset == null || blank(dataset.datasetId()) || blank(dataset.provider()) || blank(dataset.name())) {
             throw ApiException.invalid("dataset with dataset_id, provider and name is required");

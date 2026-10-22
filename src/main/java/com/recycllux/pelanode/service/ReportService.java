@@ -105,7 +105,14 @@ public class ReportService {
         return s;
     }
 
-    public Map<String, Object> export(String missionId, String format) {
+    public record ExportRequest(String format) {
+    }
+
+    public Map<String, Object> export(String missionId, ExportRequest req) {
+        if (req == null || req.format() == null) {
+            throw ApiException.invalid("format is required");
+        }
+        String format = req.format();
         Map<String, Object> summary = summary(missionId);
         String stamp = JsonConfig.UTC_MILLIS.format(Instant.now()).replaceAll("[-:.]", "");
         String ext = switch (format) {

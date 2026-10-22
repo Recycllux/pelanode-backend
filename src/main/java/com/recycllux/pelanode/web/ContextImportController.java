@@ -1,9 +1,6 @@
 package com.recycllux.pelanode.web;
 
-import com.recycllux.pelanode.domain.ContextRecord;
-import com.recycllux.pelanode.domain.DatasetSource;
 import com.recycllux.pelanode.service.ContextImportService;
-import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,15 +15,9 @@ public class ContextImportController {
 
     private final ContextImportService imports;
 
-    public record ImportRequest(DatasetSource dataset, List<ContextRecord> records, String missionId) {
-    }
-
     @PostMapping("/api/v1/context/import")
     @ResponseStatus(HttpStatus.CREATED)
-    public Map<String, Object> importContext(@RequestBody ImportRequest req) {
-        if (req == null) {
-            throw ApiException.invalid("body is required");
-        }
-        return imports.importDataset(req.dataset(), req.records(), req.missionId());
+    public Map<String, Object> importContext(@RequestBody(required = false) ContextImportService.Request req) {
+        return imports.importDataset(req);
     }
 }

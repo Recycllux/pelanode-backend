@@ -1,7 +1,6 @@
 package com.recycllux.pelanode.web;
 
 import com.recycllux.pelanode.domain.ReviewAction;
-import com.recycllux.pelanode.repo.EventRepository;
 import com.recycllux.pelanode.service.ReviewService;
 import java.util.List;
 import java.util.Map;
@@ -21,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class ReviewController {
 
     private final ReviewService reviews;
-    private final EventRepository events;
 
     @PostMapping("/review")
     public ResponseEntity<Map<String, Object>> review(@PathVariable String id, @RequestBody ReviewService.Request r) {
@@ -31,7 +29,6 @@ public class ReviewController {
 
     @GetMapping("/reviews")
     public List<ReviewAction> history(@PathVariable String id) {
-        events.findEvent(id).orElseThrow(() -> ApiException.notFound("Event", id));
-        return events.findReviews(id);
+        return reviews.history(id);
     }
 }
