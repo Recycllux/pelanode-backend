@@ -11,7 +11,7 @@ Step IDs in commits (S-xx, B-xx, I-xx) refer to the "Plan pas cu pas" document.
 ```bash
 cd backend
 ./mvnw spring-boot:run                 # http://localhost:8080/actuator/health
-./mvnw test                            # 14 tests: repositories, replay end to end, review, report, exports
+./mvnw test                            # 16 tests: repositories, replay, review, report, exports, context import
 ```
 
 Or from the repository root (loads `config/.env` if present):
@@ -54,3 +54,10 @@ data/demo/hack-001/      seed pack (mission, node, track, observations, media, c
 config/.env.example      all PN_* keys, no values
 scripts/                 demo pack builder, run-local, reset-demo, smoke-test, deploy-cloudrun
 ```
+
+## Organiser data (B-17)
+
+`POST /api/v1/context/import` with `{dataset: {...provenance: "organiser"}, records: [...], mission_id?}`
+stores the records (same id and value again is a no-op, a different value is a 409) and re-runs the
+association for the mission. The UI shows the dataset with its ORGANISER provenance next to the
+simulated series; nothing is overwritten. Records need variable, value, unit, observed_at (with offset), lat, lon.
