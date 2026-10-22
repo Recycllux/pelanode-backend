@@ -2,7 +2,9 @@ package com.recycllux.pelanode.service;
 
 import com.recycllux.pelanode.domain.EventRecord;
 import com.recycllux.pelanode.domain.ReviewAction;
+import com.recycllux.pelanode.config.PelanodeProperties;
 import com.recycllux.pelanode.repo.EventRepository;
+import com.recycllux.pelanode.replay.Simulator;
 import com.recycllux.pelanode.web.ApiException;
 import java.time.Instant;
 import java.util.LinkedHashMap;
@@ -25,10 +27,14 @@ public class ReviewService {
 
     private final EventRepository events;
     private final EventViews views;
+    private final Simulator simulator;
+    private final PelanodeProperties props;
 
-    public ReviewService(EventRepository events, EventViews views) {
+    public ReviewService(EventRepository events, EventViews views, Simulator simulator, PelanodeProperties props) {
         this.events = events;
         this.views = views;
+        this.simulator = simulator;
+        this.props = props;
     }
 
     public record Request(String action, String newLabel, String note, String reviewer, String requestId) {
@@ -57,7 +63,13 @@ public class ReviewService {
         String status;
         String label = event.currentLabel();
         switch (r.action() == null ? "" : r.action()) {
-            case "confirm" -> status = "confirmed";
+            case "confirm" -> {
+                status = "confirmed";
+                // Confirming accepts the model's class unless a reviewer already relabelled it.
+                if (label == null) {
+                    label = event.eventType();
+                }
+            }
             case "reject" -> status = "dismissed";
             case "relabel" -> {
                 if (r.newLabel() == null || r.newLabel().isBlank()) {
@@ -72,12 +84,16 @@ public class ReviewService {
 
         ReviewAction action = new ReviewAction("RV-%06d".formatted(events.countReviews() + 1), eventId,
                 r.action(), "relabel".equals(r.action()) ? r.newLabel() : null, r.note(), r.reviewer(),
-                r.requestId(), status, Instant.now(), "1.0");
+                r.requestId(), status, Instant.now(), missionTime(event), "1.0");
         events.insertReview(action);
         events.updateReviewState(eventId, status, label);
         log.info("REVIEW_RECORDED event={} action={} status={} reviewer={}", eventId, r.action(), status,
                 r.reviewer());
         return new Outcome(true, body(action, eventId));
+    }
+
+    private Instant missionTime(EventRecord event) {
+        return event.missionId().equals(props.demoMissionId()) ? simulator.clock().missionTime() : null;
     }
 
     private Map<String, Object> body(ReviewAction action, String eventId) {

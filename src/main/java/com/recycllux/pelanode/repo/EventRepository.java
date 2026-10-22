@@ -47,7 +47,8 @@ public class EventRepository {
     private static final RowMapper<ReviewAction> REVIEW_ROW = (rs, i) -> new ReviewAction(
             rs.getString("review_id"), rs.getString("event_id"), rs.getString("action"),
             rs.getString("new_label"), rs.getString("note"), rs.getString("reviewer"),
-            rs.getString("request_id"), rs.getString("resulting_status"), instant(rs, "created_at"), "1.0");
+            rs.getString("request_id"), rs.getString("resulting_status"), instant(rs, "created_at"),
+            instant(rs, "mission_time"), "1.0");
 
     public void insertEvent(EventRecord e) {
         jdbc.update("""
@@ -102,10 +103,10 @@ public class EventRepository {
     public void insertReview(ReviewAction r) {
         jdbc.update("""
                 INSERT INTO review_action (review_id, event_id, action, new_label, note, reviewer,
-                  request_id, resulting_status, created_at)
-                VALUES (?,?,?,?,?,?,?,?,?)""",
+                  request_id, resulting_status, created_at, mission_time)
+                VALUES (?,?,?,?,?,?,?,?,?,?)""",
                 r.reviewId(), r.eventId(), r.action(), r.newLabel(), r.note(), r.reviewer(), r.requestId(),
-                r.resultingStatus(), ts(r.createdAt()));
+                r.resultingStatus(), ts(r.createdAt()), ts(r.missionTime()));
     }
 
     public Optional<ReviewAction> findReviewByRequest(String requestId) {

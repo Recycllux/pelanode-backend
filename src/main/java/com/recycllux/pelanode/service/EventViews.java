@@ -161,6 +161,7 @@ public class EventViews {
         b.put("last_action", last == null ? null : last.action());
         b.put("by", last == null ? null : last.reviewer());
         b.put("at", last == null ? null : last.createdAt());
+        b.put("mission_time", last == null ? null : last.missionTime());
         b.put("note", last == null ? null : last.note());
         return b;
     }

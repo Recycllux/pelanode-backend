@@ -7,10 +7,12 @@ import com.recycllux.pelanode.domain.ContextRecord;
 import com.recycllux.pelanode.domain.DatasetSource;
 import com.recycllux.pelanode.domain.DeviceStatus;
 import com.recycllux.pelanode.domain.Mission;
+import com.recycllux.pelanode.pack.DemoPack;
 import com.recycllux.pelanode.repo.ContextRepository;
 import com.recycllux.pelanode.repo.MissionRepository;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,13 +38,15 @@ public class MissionController {
     private final ContextRepository context;
     private final JdbcTemplate jdbc;
     private final ObjectMapper mapper;
+    private final DemoPack pack;
 
     public MissionController(MissionRepository missions, ContextRepository context, JdbcTemplate jdbc,
-                             ObjectMapper mapper) {
+                             ObjectMapper mapper, DemoPack pack) {
         this.missions = missions;
         this.context = context;
         this.jdbc = jdbc;
         this.mapper = mapper;
+        this.pack = pack;
     }
 
     @GetMapping("/missions")
@@ -128,10 +132,16 @@ public class MissionController {
         return context.findAllDatasets();
     }
 
-    /** Latest device status for the node in a mission. */
+    /**
+     * Latest device status for the node in a mission. Before the replay has sent any status
+     * (state idle), the first status of the demo pack stands in, so the UI has values to show.
+     */
     @GetMapping("/nodes/{id}/status")
     public DeviceStatus status(@PathVariable String id, @RequestParam("mission_id") String missionId) {
         return missions.latestStatus(id, missionId, null)
+                .or(() -> pack.deviceStatus().stream()
+                        .filter(s -> s.nodeId().equals(id) && s.missionId().equals(missionId))
+                        .min(Comparator.comparing(DeviceStatus::observedAt)))
                 .orElseThrow(() -> ApiException.notFound("Device status for node", id));
     }
 

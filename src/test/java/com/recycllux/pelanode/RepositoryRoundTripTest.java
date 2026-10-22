@@ -74,7 +74,7 @@ class RepositoryRoundTripTest {
         events.insertContext(new EventContext("EV-0142", "sim:STN-SIM-01:2026-10-24T14:22:00Z",
                 "coincides_with", 11.2, -10, "ASSOC-LEVEL-25KM-6H", T));
         events.insertReview(new ReviewAction("RV-000001", "EV-0142", "confirm", null, "Visible bottle",
-                "Duty officer (demo)", "6f1c2a9e-3b7d-4c55-9f0e-1a2b3c4d5e6f", "confirmed", T, "1.0"));
+                "Duty officer (demo)", "6f1c2a9e-3b7d-4c55-9f0e-1a2b3c4d5e6f", "confirmed", T, null, "1.0"));
 
         assertThat(missions.findMission("HACK-001")).get()
                 .satisfies(m -> assertThat(m.areaBbox()).containsExactly(25.90, 43.88, 25.98, 43.92));

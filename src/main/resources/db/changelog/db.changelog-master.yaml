@@ -12,3 +12,14 @@ databaseChangeLog:
             splitStatements: true
             stripComments: true
             endDelimiter: ";"
+  - changeSet:
+      id: 002-review-mission-time
+      author: pelanode
+      comment: Mission time of each review (shown by the UI next to the real time)
+      changes:
+        - sqlFile:
+            path: sql/002-review-mission-time.sql
+            relativeToChangelogFile: true
+            splitStatements: true
+            stripComments: true
+            endDelimiter: ";"

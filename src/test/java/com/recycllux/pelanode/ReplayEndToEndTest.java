@@ -99,6 +99,9 @@ class ReplayEndToEndTest {
         mvc.perform(write("/events/EV-0142/review", confirm)).andExpect(status().isCreated())
                 .andExpect(jsonPath("$.review.resulting_status").value("confirmed"))
                 .andExpect(jsonPath("$.event.review.status").value("confirmed"))
+                .andExpect(jsonPath("$.event.review.current_label").value("anthropogenic_debris"))
+                .andExpect(jsonPath("$.event.review.mission_time").value("2026-10-24T15:04:00.000Z"))
+                .andExpect(jsonPath("$.event.review.at").isString())
                 .andExpect(jsonPath("$.event.model_output.class").value("anthropogenic_debris"))
                 .andExpect(jsonPath("$.event.model_output.confidence").value(0.93));
         mvc.perform(write("/events/EV-0142/review", confirm)).andExpect(status().isOk());
@@ -113,6 +116,16 @@ class ReplayEndToEndTest {
         mvc.perform(get(API + "/missions/HACK-001"))
                 .andExpect(jsonPath("$.counts.reviewed").value(2))
                 .andExpect(jsonPath("$.counts.events").value(3));
+    }
+
+    @Test
+    void nodeStatusExistsBeforeStart() throws Exception {
+        mvc.perform(get(API + "/nodes/PN-MVP-001/status").param("mission_id", "HACK-001"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.observed_at").value("2026-10-24T14:22:00.000Z"))
+                .andExpect(jsonPath("$.battery_pct").isNumber());
+        mvc.perform(get(API + "/nodes/PN-NOPE/status").param("mission_id", "HACK-001"))
+                .andExpect(status().isNotFound());
     }
 
     @Test
