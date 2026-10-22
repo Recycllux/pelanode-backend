@@ -17,8 +17,8 @@ spring:
     url: ${PN_DB_URL:jdbc:h2:file:./.data/pelanode}
     username: ${PN_DB_USER:sa}
     password: ${PN_DB_PASSWORD:}
-  flyway:
-    locations: classpath:db/migration
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yaml
   jackson:
     property-naming-strategy: SNAKE_CASE
     default-property-inclusion: always

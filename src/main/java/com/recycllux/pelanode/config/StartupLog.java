@@ -25,9 +25,11 @@ public class StartupLog {
     @EventListener(ApplicationReadyEvent.class)
     @Order(10)
     public void started() {
-        log.info("SERVICE_STARTED profile={} simulated_mode={} mission={} replay_speed={} ai_mode={} "
+        String url = env.getProperty("spring.datasource.url", "");
+        String db = url.startsWith("jdbc:postgresql:") ? "postgresql" : url.startsWith("jdbc:h2:") ? "h2" : "other";
+        log.info("SERVICE_STARTED profile={} db={} simulated_mode={} mission={} replay_speed={} ai_mode={} "
                         + "context_adapter={} write_key_set={}",
-                String.join(",", env.getActiveProfiles()), props.simulatedMode(), props.demoMissionId(),
+                String.join(",", env.getActiveProfiles()), db, props.simulatedMode(), props.demoMissionId(),
                 props.replaySpeed(), props.aiMode(), props.contextAdapter(),
                 props.writeApiKey() != null && !props.writeApiKey().isBlank());
     }

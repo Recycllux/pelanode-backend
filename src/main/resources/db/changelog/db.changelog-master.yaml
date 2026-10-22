@@ -1,0 +1,14 @@
+# Liquibase changelog. Each change is a plain SQL file that runs on H2 (PostgreSQL mode) and on
+# PostgreSQL. Never edit a changeset that has run: add a new file and a new changeSet below it.
+databaseChangeLog:
+  - changeSet:
+      id: 001-init
+      author: pelanode
+      comment: Schema from P0-13 section 7
+      changes:
+        - sqlFile:
+            path: sql/001-init.sql
+            relativeToChangelogFile: true
+            splitStatements: true
+            stripComments: true
+            endDelimiter: ";"

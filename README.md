@@ -26,6 +26,23 @@ directory upwards, so it does not matter which folder the app is started from.
 Local data lives in `.data/` (H2 file, exports). Delete the folder to start clean.
 The H2 console is at `/h2-console` on the `local` profile only (JDBC URL `jdbc:h2:file:./.data/pelanode`).
 
+## Database
+
+Embedded H2 by default (file in `.data/`, PostgreSQL compatibility mode): nothing to install.
+For PostgreSQL, create an empty database and put the connection in `config/.env`
+(copy `config/.env.example`); the app reads that file by itself:
+
+```
+PN_DB_URL=jdbc:postgresql://localhost:5432/pelanode
+PN_DB_USER=postgres
+PN_DB_PASSWORD=...
+```
+
+Liquibase creates the tables at startup (`src/main/resources/db/changelog`). To change the schema,
+add a new SQL file and a new changeSet; never edit one that has already run. Run the storyboard
+test on PostgreSQL with `PN_TEST_PG_URL=jdbc:postgresql://localhost:5432/pelanode_test
+PN_TEST_PG_USER=postgres PN_TEST_PG_PASSWORD=... ./mvnw test` (that database is wiped first).
+
 ## Tests and scripts
 
 ```bash
@@ -65,7 +82,7 @@ Every setting is a `PN_*` environment variable; see `config/.env.example` and P0
 
 ```
 pom.xml, mvnw             Spring Boot 3.5, Java 21 (Maven project at the root)
-src/main/resources/db/migration/V1__init.sql   schema from P0-13 section 7
+src/main/resources/db/changelog/  Liquibase changelog; sql/001-init.sql = schema from P0-13 section 7
 src/main/resources/static/  prebuilt UI bundle (scripts/build-ui.sh)
 src/main/java/.../domain    records matching the P0-13 entities (snake_case JSON)
 src/main/java/.../repo      JdbcTemplate repositories
