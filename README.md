@@ -107,11 +107,18 @@ All endpoints are read-only and dates are in that 2021 window.
   recommendation; `mission_id` picks the forecastable station nearest the mission area (HACK-001: Giurgiu)
 - `GET /api/v1/danube/backtest?station=`: walk-forward skill against persistence and how many days ahead each
   threshold crossing was warned
+- `GET /api/v1/danube/point?lat=&lon=&as_of=&month=`: real context for one position (a PelaNode event or any
+  point): the nearest Danube gauge with its level, 24 h change and thresholds, plus precipitation and soil moisture
+  from the nearest climate grid cell with its rank across Bulgaria and the 12 month series
 
 The model is a ridge regression on 1 and 3 day level changes at upstream gauges (50 to 1,000 km upstream),
 refitted for every as-of date on data available at that date only. Giurgiu: mean error 1.6 cm at 1 day and
 13.8 cm at 6 days, against 8.1 and 39.8 cm for "no change". Thresholds are the station's P10/P90, a stand-in until
 the navigation and flood-alert levels are configured.
+
+Climate grids (precipitation and soil moisture over Bulgaria, monthly 2024) come from the organiser's Earth Engine
+exports, built into `data/climate/` by `python3 scripts/build_climate_pack.py <Share/gee_output dir>`; see
+`data/climate/PROVENANCE.md`. They are matched to the Danube date by calendar month.
 
 ## Organiser data (B-17)
 
