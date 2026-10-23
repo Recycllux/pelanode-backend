@@ -1,1 +1,0 @@
-import{t as e}from"./jsx-runtime-B-hcVAMW.js";import{n as t}from"./AppShell-DQooHT0e.js";var n=e();function r(){return(0,n.jsx)(t,{title:`Dual Vision`,text:`Side-by-side surface and underwater frames for paired observations.`})}export{r as component};

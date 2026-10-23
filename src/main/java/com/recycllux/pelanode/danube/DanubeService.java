@@ -5,12 +5,14 @@ import com.recycllux.pelanode.repo.MissionRepository;
 import com.recycllux.pelanode.service.Geo;
 import com.recycllux.pelanode.web.ApiException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +27,7 @@ public class DanubeService {
     static final double LOW_PERCENTILE = 10;
     static final double HIGH_PERCENTILE = 90;
     static final double RAPID_CHANGE_CM = 30;
+    static final DateTimeFormatter DAY = DateTimeFormatter.ofPattern("d MMM yyyy", Locale.ENGLISH);
     static final List<String> WARM_STATIONS = List.of("GIURGIU", "RUSE_BRIDGE");
     static final String PROVENANCE = "organiser";
     static final String SOURCE = "EIT Water Hackathon organiser data: Danube hydrological bulletin and Bulgarian "
@@ -299,19 +302,23 @@ public class DanubeService {
         if (low.isPresent()) {
             r.put("action", "survey_shallows");
             r.put("by", low.get().get("date"));
-            r.put("text", "Deploy PelaNode on the " + s.name() + " reach before " + low.get().get("date")
+            r.put("text", "Deploy PelaNode on the " + s.name() + " reach before " + day(low.get().get("date"))
                     + " to map shoals and stranded debris in the fairway while the river falls.");
         } else if (rise.isPresent()) {
             r.put("action", "survey_behind_crest");
             r.put("by", rise.get().get("date"));
             r.put("text", "Deploy PelaNode behind the high-water pulse reaching " + s.name() + " around "
-                    + rise.get().get("date") + " to record debris and turbidity the wave carries.");
+                    + day(rise.get().get("date")) + " to record debris and turbidity the wave carries.");
         } else {
             r.put("action", "routine");
             r.put("by", null);
             r.put("text", "No trigger in the forecast window: keep routine monitoring.");
         }
         return r;
+    }
+
+    private static String day(Object date) {
+        return ((LocalDate) date).format(DAY);
     }
 
     private List<Map<String, Object>> drivers(LevelForecaster.Model model, int day) {
