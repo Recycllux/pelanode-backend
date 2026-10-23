@@ -1,0 +1,74 @@
+station_id,name,name_bg,country,river,river_km,lat,lon,coords_approx,source
+SCHWABELWEIS,Schwabelweis,Швабелвайс,DE,Danube,2376.5,49.03,12.14,true,bulletin
+PFELLING,Pfelling,Пфелинг,DE,Danube,2305.53,48.88,12.75,true,bulletin
+HOFKIRCHEN,Hofkirchen,Хофкирхен,DE,Danube,2256.86,48.68,13.12,true,bulletin
+ENGELHARTSZELL,Engelhartszell,Енгелхартсцел,AT,Danube,2200.7,48.51,13.73,true,bulletin
+LINZ,Linz,Линц,AT,Danube,2135.2,48.31,14.29,true,bulletin
+MELK,Melk,Мелк,AT,Danube,2036.0,48.23,15.33,true,bulletin
+KIENSTOCK,Kienstock,Кинщок,AT,Danube,2015.21,48.38,15.46,true,bulletin
+KORNEUBURG,Korneuburg,Корнойбург,AT,Danube,1941.9,48.35,16.33,true,bulletin
+WILDUNGSMAUER,Wildungsmauer,Вилдунгсмауер,AT,Danube,1894.72,48.12,16.8,true,bulletin
+DEVIN,Devin,Девин,SK,Danube,1879.8,48.17,16.98,true,bulletin
+MEDVEDOV,Medvedov,Медведьов,SK,Danube,1806.1,47.79,17.65,true,bulletin
+GONYU,Gonyu,Гьоню,HU,Danube,1791.3,47.74,17.83,true,bulletin
+KOMAROM,Komarom,Комаром,HU,Danube,1768.34,47.75,18.12,true,bulletin
+KOMARNO,Komarno,Комарно,SK,Danube,1767.4,47.76,18.13,true,bulletin
+NAGYMAROS,Nagymaros,Надмарош,HU,Danube,1694.6,47.79,18.96,true,bulletin
+BUDAPEST,Budapest,Будапеща,HU,Danube,1646.5,47.49,19.05,true,bulletin
+DUNAUJVAROS,Dunaujvaros,Дунауйварош,HU,Danube,1580.6,46.96,18.94,true,bulletin
+DUNAFOLDVAR,Dunafoldvar,Дунафелдвар,HU,Danube,1560.6,46.81,18.93,true,bulletin
+PAKS,Paks,Пакш,HU,Danube,1531.3,46.62,18.86,true,bulletin
+BAJA,Baja,Байя,HU,Danube,1478.7,46.18,18.94,true,bulletin
+MOHACS,Mohacs,Мохач,HU,Danube,1446.9,45.99,18.69,true,bulletin
+BEZDAN,Bezdan,Бездан,RS,Danube,1425.6,45.85,18.86,true,bulletin
+APATIN,Apatin,Апатин,RS,Danube,1401.9,45.67,18.98,true,bulletin
+BOGOJEVO,Bogojevo,Богоево,RS,Danube,1367.25,45.53,19.13,true,bulletin
+VUKOVAR,Vukovar,Вуковар,HR,Danube,1333.1,45.35,19.0,true,bulletin
+NOVI_SAD,Novi Sad,Нови сад,RS,Danube,1254.98,45.25,19.85,true,bulletin
+ZEMUN,Zemun,Земун,RS,Danube,1173.31,44.85,20.41,true,bulletin
+PANCEVO,Pancevo,Панчево,RS,Danube,1154.54,44.86,20.64,true,bulletin
+SMEDEREVO,Smederevo,Смедерево,RS,Danube,1116.23,44.67,20.93,true,bulletin
+BAZIAS,Bazias,Базиаш,RO,Danube,1072.5,44.81,21.38,true,bulletin
+VELIKO_GRADISTE,Veliko Gradiste,Велико градище,RS,Danube,1059.0,44.76,21.52,true,bulletin
+MOLDOVA_VECHE,Moldova Veche,Молдова Веке,RO,Danube,1048.0,44.72,21.63,true,bulletin
+DRENCOVA,Drencova,Дренкова,RO,Danube,1016.18,44.66,21.87,true,bulletin
+ORSOVA,Orsova,Оршова,RO,Danube,954.0,44.72,22.4,true,bulletin
+TURNU_SEVERIN,Drobeta-Turnu Severin,Турну Северин,RO,Danube,931.0,44.63,22.66,true,bulletin
+PRAHOVO,Prahovo,Прахово,RS,Danube,861.0,44.29,22.6,true,bulletin
+GRUIA,Gruia,Груя,RO,Danube,851.0,44.27,22.7,true,bulletin
+NOVO_SELO,Novo Selo,Ново село,BG,Danube,833.6,44.16,22.78,true,automatic
+GOMOTARTSI,Gomotartsi,Гомотарци,BG,Danube,819.0,44.1,22.95,true,automatic
+VIDIN_BRIDGE,Vidin bridge,мост Видин,BG,Danube,796.0,43.97,22.92,true,automatic
+CALAFAT,Calafat,Калафат,RO,Danube,795.0,43.99,22.94,true,bulletin
+LOM,Lom,Лом,BG,Danube,743.3,43.83,23.24,true,automatic
+KOZLODUY,Kozloduy,Козлодуй,BG,Danube,703.9,43.79,23.73,true,automatic
+BECHET,Bechet,Бекет,RO,Danube,679.0,43.77,23.96,true,bulletin
+GORNI_VADIN,Gorni Vadin,Горни Вадин,BG,Danube,653.6,43.71,24.07,true,automatic
+BAYKAL,Baykal,Байкал,BG,Danube,640.8,43.71,24.42,true,automatic
+CORABIA,Corabia,Корабия,RO,Danube,630.0,43.77,24.5,true,bulletin
+ZAGRAZHDEN,Zagrazhden,Загражден,BG,Danube,625.0,43.73,24.52,true,automatic
+NIKOPOL,Nikopol,Никопол,BG,Danube,597.5,43.7,24.89,true,automatic
+TURNU_MAGURELE,Turnu Magurele,Турну Мъгуреле,RO,Danube,597.0,43.75,24.87,true,bulletin
+SVISHTOV,Svishtov,Свищов,BG,Danube,554.3,43.62,25.35,true,automatic
+ZIMNICEA,Zimnicea,Зимнич,RO,Danube,553.6,43.65,25.37,true,bulletin
+GIURGIU,Giurgiu,Гюргево,RO,Danube,493.0,43.88,25.97,true,bulletin
+RUSE_BRIDGE,Ruse bridge,мост Русе,BG,Danube,488.7,43.89,25.99,true,automatic
+RYAHOVO,Ryahovo,Ряхово,BG,Danube,465.4,43.98,26.28,true,automatic
+OLTENITA,Oltenita,Олтеница,RO,Danube,430.0,44.08,26.64,true,bulletin
+MALAK_PRESLAVETS,Malak Preslavets,Малък Преславец,BG,Danube,413.9,44.1,26.84,true,automatic
+CALARASI,Calarasi,Кълараш,RO,Danube,370.5,44.2,27.33,true,bulletin
+CERNAVODA,Cernavoda,Чернавода,RO,Danube,300.0,44.34,28.03,true,bulletin
+HARSOVA,Harsova,Хършова,RO,Danube,253.0,44.69,27.95,true,bulletin
+BRAILA,Braila,Браила,RO,Danube,170.0,45.27,27.97,true,bulletin
+GALATI,Galati,Галац,RO,Danube,150.0,45.43,28.05,true,bulletin
+ISACCEA,Isaccea,Исакча,RO,Danube,103.8,45.27,28.46,true,bulletin
+TULCEA,Tulcea,Тулча,RO,Danube,71.3,45.18,28.8,true,bulletin
+SREMSKA_MITROVICA,Sremska Mitrovica,С. Митровица,RS,Sava,136.4,44.97,19.61,true,bulletin
+SABAC,Sabac,Шабац,RS,Sava,102.6,44.76,19.7,true,bulletin
+BEOGRAD_SAVA,Belgrade (Sava),Белград,RS,Sava,2.0,44.82,20.45,true,bulletin
+SENTA,Senta,Сента,RS,Tisza,122.0,45.93,20.09,true,bulletin
+NOVI_BECEJ,Novi Becej,Нови Бечей,RS,Tisza,65.0,45.6,20.13,true,bulletin
+TITEL,Titel,Тител,RS,Tisza,9.48,45.21,20.29,true,bulletin
+VARVARIN,Varvarin,Варварин,RS,Velika Morava,237.2,43.72,21.37,true,bulletin
+BAGRDAN,Bagrdan,Багрдан,RS,Velika Morava,154.1,44.08,21.18,true,bulletin
+LJUBICEVSKI_MOST,Ljubicevski most,Любич. мост,RS,Velika Morava,21.75,44.59,21.13,true,bulletin

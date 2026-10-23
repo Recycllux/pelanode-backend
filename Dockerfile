@@ -13,10 +13,12 @@ FROM eclipse-temurin:21-jre
 WORKDIR /app
 COPY --from=backend /build/target/pelanode-poc.jar app.jar
 COPY data/demo /app/data/demo
+COPY data/danube /app/data/danube
 ENV SPRING_PROFILES_ACTIVE=cloud \
     PN_DB_URL=jdbc:h2:file:/tmp/pelanode \
     PN_DEMO_PACK_DIR=/app/data/demo/hack-001 \
     PN_MEDIA_ROOT=/app/data/demo/hack-001/media \
+    PN_DANUBE_DIR=/app/data/danube \
     PN_EXPORT_DIR=/tmp/exports
 EXPOSE 8080
 ENTRYPOINT ["java", "-XX:MaxRAMPercentage=75", "-jar", "/app/app.jar"]

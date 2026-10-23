@@ -21,5 +21,6 @@ public record PelanodeProperties(
         double assocTempKm,
         double assocTempHours,
         String writeApiKey,
-        String corsOrigins) {
+        String corsOrigins,
+        String danubeDir) {
 }
