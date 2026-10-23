@@ -1,6 +1,7 @@
 package com.recycllux.pelanode.web;
 
 import com.recycllux.pelanode.danube.DanubeService;
+import com.recycllux.pelanode.danube.PointContextService;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class DanubeController {
 
     private final DanubeService danube;
+    private final PointContextService points;
 
     @GetMapping("/stations")
     public Map<String, Object> stations() {
@@ -39,6 +41,14 @@ public class DanubeController {
                                         @RequestParam(name = "as_of", required = false) String asOf,
                                         @RequestParam(required = false) Integer horizon) {
         return danube.forecast(station, missionId, asOf, horizon);
+    }
+
+    @GetMapping("/point")
+    public Map<String, Object> point(@RequestParam(required = false) Double lat,
+                                     @RequestParam(required = false) Double lon,
+                                     @RequestParam(name = "as_of", required = false) String asOf,
+                                     @RequestParam(required = false) Integer month) {
+        return points.at(lat, lon, asOf, month);
     }
 
     @GetMapping("/backtest")

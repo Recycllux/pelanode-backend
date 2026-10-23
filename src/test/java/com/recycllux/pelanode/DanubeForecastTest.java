@@ -1,8 +1,10 @@
 package com.recycllux.pelanode;
 
+import static org.hamcrest.Matchers.anyOf;
 import static org.hamcrest.Matchers.everyItem;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.lessThan;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -65,5 +67,20 @@ class DanubeForecastTest {
                 .andExpect(jsonPath("$.skill.length()").value(6))
                 .andExpect(jsonPath("$.skill[*].improvement_pct", everyItem(greaterThan(40.0))))
                 .andExpect(jsonPath("$.skill[0].mae_model_cm", lessThan(3.0)));
+    }
+
+    @Test
+    void pointContextJoinsNearestGaugeAndClimateCell() throws Exception {
+        mvc.perform(get(API + "/point").param("lat", "43.8998").param("lon", "25.9306").param("as_of", "2021-10-01"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.nearest_gauge.station.station_id").value(anyOf(is("GIURGIU"), is("RUSE_BRIDGE"))))
+                .andExpect(jsonPath("$.nearest_gauge.distance_km", lessThan(15.0)))
+                .andExpect(jsonPath("$.nearest_gauge.level_cm").isNumber())
+                .andExpect(jsonPath("$.climate.length()").value(2))
+                .andExpect(jsonPath("$.climate[0].month").value("2024-10"))
+                .andExpect(jsonPath("$.climate[0].series.length()").value(12))
+                .andExpect(jsonPath("$.climate[1].value").isNumber());
+        mvc.perform(get(API + "/point").param("lat", "43.9"))
+                .andExpect(status().isUnprocessableEntity());
     }
 }

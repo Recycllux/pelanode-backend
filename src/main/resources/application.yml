@@ -60,6 +60,7 @@ pelanode:
   write-api-key: ${PN_WRITE_API_KEY:}
   cors-origins: ${PN_CORS_ORIGINS:http://localhost:5173}
   danube-dir: ${PN_DANUBE_DIR:data/danube}
+  climate-dir: ${PN_CLIMATE_DIR:data/climate}
 
 ---
 spring:
