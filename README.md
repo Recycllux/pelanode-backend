@@ -46,7 +46,7 @@ PN_TEST_PG_USER=postgres PN_TEST_PG_PASSWORD=... ./mvnw test` (that database is 
 ## Tests and scripts
 
 ```bash
-./mvnw test                                   # 18 tests: repositories, replay, review, report, exports, context import
+./mvnw test                                   # 21 tests: repositories, replay, review, report, exports, context import, Danube forecast
 scripts/run-local.sh [--clean]                # loads config/.env if present; --clean wipes .data first
 scripts/reset-demo.sh [base_url]              # POST /demo/reset, needs PN_WRITE_API_KEY if the server has one
 scripts/smoke-test.sh [base_url]              # P0-17 checklist: events, context, review, report, export, UI
@@ -91,6 +91,27 @@ data/demo/hack-001/       seed pack (mission, node, track, observations, media, 
 config/.env.example       all PN_* keys, no values
 scripts/                  demo pack builder, build-ui, run-local, reset-demo, smoke-test, deploy-cloudrun
 ```
+
+## Danube level forecast
+
+Organiser data from `Share/Danube` (daily levels, 61 bulletin stations from Germany to Tulcea plus 13 Bulgarian
+automatic gauges, 2021-06-06 to 2021-11-09) is cleaned into `data/danube/` by
+`python3 scripts/build_danube_pack.py <Share/Danube dir>`; see `data/danube/PROVENANCE.md`.
+All endpoints are read-only and dates are in that 2021 window.
+
+- `GET /api/v1/danube/stations`: stations, data coverage, demo thresholds
+- `GET /api/v1/danube/profile?date=`: level, 24 h change and anomaly against the station median, by river km, for one day
+- `GET /api/v1/danube/series?station=&from=&to=`: level and water temperature for one station
+- `GET /api/v1/danube/forecast?station=|mission_id=&as_of=&horizon=`: 1 to 6 day level forecast with an error band,
+  low-water / high-water / rapid-change alerts, the upstream gauges driving it and a PelaNode deployment
+  recommendation; `mission_id` picks the forecastable station nearest the mission area (HACK-001: Giurgiu)
+- `GET /api/v1/danube/backtest?station=`: walk-forward skill against persistence and how many days ahead each
+  threshold crossing was warned
+
+The model is a ridge regression on 1 and 3 day level changes at upstream gauges (50 to 1,000 km upstream),
+refitted for every as-of date on data available at that date only. Giurgiu: mean error 1.6 cm at 1 day and
+13.8 cm at 6 days, against 8.1 and 39.8 cm for "no change". Thresholds are the station's P10/P90, a stand-in until
+the navigation and flood-alert levels are configured.
 
 ## Organiser data (B-17)
 

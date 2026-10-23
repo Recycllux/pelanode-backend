@@ -59,6 +59,7 @@ pelanode:
   assoc-temp-hours: ${PN_ASSOC_TEMP_HOURS:24}
   write-api-key: ${PN_WRITE_API_KEY:}
   cors-origins: ${PN_CORS_ORIGINS:http://localhost:5173}
+  danube-dir: ${PN_DANUBE_DIR:data/danube}
 
 ---
 spring:
