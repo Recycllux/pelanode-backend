@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-label="Schematic illustration of the breached Aurul tailings dam releasing water into a stream, winter night">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1b2a44"/>
+      <stop offset="1" stop-color="#3b4a63"/>
+    </linearGradient>
+    <linearGradient id="pond" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#6f8f8a"/>
+      <stop offset="1" stop-color="#8fb1a8"/>
+    </linearGradient>
+    <linearGradient id="spill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#9cc3b6"/>
+      <stop offset="1" stop-color="#5f8f86"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="300" fill="url(#sky)"/>
+  <!-- hills -->
+  <path d="M0 120 L60 80 L120 110 L190 70 L260 105 L330 75 L400 100 L400 300 L0 300 Z" fill="#4a5a70"/>
+  <path d="M60 80 L75 90 L52 92 Z M190 70 L208 84 L178 85 Z M330 75 L346 88 L318 88 Z" fill="#e8eef4"/>
+  <!-- plant -->
+  <g fill="#2a3446">
+    <rect x="300" y="92" width="46" height="26"/>
+    <rect x="312" y="74" width="8" height="18"/>
+    <rect x="350" y="100" width="28" height="18"/>
+  </g>
+  <g fill="#f4c66a"><rect x="306" y="100" width="4" height="4"/><rect x="318" y="100" width="4" height="4"/><rect x="330" y="100" width="4" height="4"/><rect x="356" y="106" width="4" height="4"/><rect x="366" y="106" width="4" height="4"/></g>
+  <!-- snowy ground -->
+  <path d="M0 150 C80 140 160 150 240 144 C300 140 350 146 400 142 L400 300 L0 300 Z" fill="#dfe6ec"/>
+  <!-- tailings pond and dam -->
+  <path d="M40 160 L250 152 L268 196 L28 204 Z" fill="#9aa4ae"/>
+  <path d="M52 164 L242 157 L254 188 L44 194 Z" fill="url(#pond)"/>
+  <path d="M44 194 L254 188 L268 196 L28 204 Z" fill="#7c8691"/>
+  <!-- breach -->
+  <path d="M150 190 L176 189 L182 205 L146 206 Z" fill="#3b4652"/>
+  <path d="M152 190 C158 210 150 230 132 248 C118 262 96 274 70 300 L130 300 C150 280 170 262 178 240 C184 222 178 204 174 190 Z" fill="url(#spill)" opacity="0.95"/>
+  <!-- stream -->
+  <path d="M70 300 C120 276 210 268 260 262 C310 256 360 264 400 258 L400 280 C360 284 310 278 262 284 C210 290 150 296 120 300 Z" fill="#6d8f96"/>
+  <!-- foam -->
+  <g fill="#eef6f3" opacity="0.85">
+    <circle cx="160" cy="214" r="3"/><circle cx="150" cy="232" r="2.5"/><circle cx="138" cy="250" r="3"/><circle cx="118" cy="266" r="2.5"/><circle cx="210" cy="276" r="2"/><circle cx="250" cy="270" r="2"/>
+  </g>
+  <!-- rain / melting snow -->
+  <g stroke="#c9d6e2" stroke-width="1" opacity="0.6">
+    <path d="M30 20 l-4 12 M90 30 l-4 12 M150 15 l-4 12 M210 35 l-4 12 M270 22 l-4 12 M340 30 l-4 12 M380 12 l-4 12 M60 55 l-4 12 M240 60 l-4 12 M120 50 l-4 12"/>
+  </g>
+</svg>
