@@ -1,1 +1,0 @@
-import{n as e}from"./preload-helper-BED2mkar.js";import{n as t}from"./AppShell-gbaUVHzC.js";var n=e();function r(){return(0,n.jsx)(t,{title:`Settings`,text:`Portal preferences and reviewer profile.`})}export{r as component};
