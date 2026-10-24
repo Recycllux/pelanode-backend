@@ -147,11 +147,11 @@ class ReplayEndToEndTest {
         mvc.perform(write("/missions/HACK-001/replay", "{\"action\":\"seek\",\"to\":\"2026-10-24T14:23:00Z\"}"));
         String tp = """
                 {"track_point_id":"TP-HACK-001-0001","mission_id":"HACK-001","node_id":"PN-MVP-001",
-                 "captured_at":"2026-10-24T14:22:00.000Z","lat":43.899,"lon":25.92,"h_acc_m":3.0,
-                 "speed_mps":0.67,"heading_deg":83.7,"source":"replayed","quality_flag":"demo_only",
+                 "captured_at":"2026-10-24T14:22:00.000Z","lat":43.86846,"lon":25.969883,"h_acc_m":3.0,
+                 "speed_mps":0.67,"heading_deg":52.6,"source":"replayed","quality_flag":"demo_only",
                  "data_origin":"replayed"}""";
         mvc.perform(write("/trackpoints", tp)).andExpect(jsonPath("$.rejected", hasSize(0)));
-        mvc.perform(write("/trackpoints", tp.replace("43.899", "44.0")))
+        mvc.perform(write("/trackpoints", tp.replace("43.86846", "44.0")))
                 .andExpect(jsonPath("$.rejected", hasSize(1)));
     }
 }

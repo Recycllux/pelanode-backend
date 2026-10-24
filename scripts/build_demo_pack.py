@@ -16,10 +16,12 @@ from pathlib import Path
 OUT = Path(sys.argv[1] if len(sys.argv) > 1 else "data/demo/hack-001")
 START = datetime(2026, 10, 24, 14, 22, tzinfo=timezone.utc)
 MINUTES = 42                       # 14:22 -> 15:04, 43 points (P0-08)
-LAT0, LON0 = 43.8990, 25.9200      # Lower Danube demonstration zone (synthetic)
+LAT0, LON0 = 43.868460, 25.969883  # on the Danube channel between Giurgiu and Ruse
+LAT1, LON1 = 43.903377, 26.050363  # further downstream on the channel; the drift heads this way
 M_PER_DEG_LAT = 111_320.0
 M_PER_DEG_LON = M_PER_DEG_LAT * math.cos(math.radians(LAT0))
 DRIFT_M = 1700.0                   # about 1.7 km over the mission (P0-08 scene 3)
+MEANDER_M = 60.0
 
 
 def iso(t):
@@ -33,15 +35,22 @@ def dump(name, data):
 
 
 def track():
+    dx = (LON1 - LON0) * M_PER_DEG_LON
+    dy = (LAT1 - LAT0) * M_PER_DEG_LAT
+    length = math.hypot(dx, dy)
+    ux, uy = dx / length, dy / length          # downstream unit vector (east, north)
     points = []
     step = DRIFT_M / MINUTES
     for i in range(MINUTES + 1):
-        east = step * i
-        north = 60.0 * math.sin(i / MINUTES * math.pi)       # gentle meander
+        along = step * i
+        side = MEANDER_M * math.sin(i / MINUTES * math.pi)  # gentle meander across the channel
+        d_side = MEANDER_M * math.pi / MINUTES * math.cos(i / MINUTES * math.pi)
+        east = ux * along - uy * side
+        north = uy * along + ux * side
         lat = round(LAT0 + north / M_PER_DEG_LAT, 6)
         lon = round(LON0 + east / M_PER_DEG_LON, 6)
-        heading = round((90.0 - math.degrees(math.atan2(
-            60.0 * math.pi / MINUTES * math.cos(i / MINUTES * math.pi), step))) % 360, 1)
+        v_east, v_north = ux * step - uy * d_side, uy * step + ux * d_side
+        heading = round(math.degrees(math.atan2(v_east, v_north)) % 360, 1)
         points.append({
             "track_point_id": f"TP-HACK-001-{i + 1:04d}",
             "mission_id": "HACK-001", "node_id": "PN-MVP-001",
@@ -177,7 +186,7 @@ def main():
         "scenario": "Post-high-flow reconnaissance, drift replay",
         "region": "Lower Danube demonstration zone (synthetic)", "node_id": "PN-MVP-001",
         "mode": "drift", "planned_start": iso(START), "planned_end": iso(START + timedelta(minutes=MINUTES)),
-        "area_bbox": [25.90, 43.88, 25.98, 43.92], "event_id_start": 142,
+        "area_bbox": [25.95, 43.86, 26.01, 43.89], "event_id_start": 142,
         "data_origin": "simulated", "schema_version": "1.0",
     })
     dump("node.json", {"node_id": "PN-MVP-001", "node_type": "simulated",
