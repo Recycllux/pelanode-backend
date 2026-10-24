@@ -44,6 +44,14 @@ class ReplayEndToEndTest {
     }
 
     @Test
+    void routeIsWholeBeforeTheReplay() throws Exception {
+        mvc.perform(get(API + "/missions/HACK-001/track")).andExpect(jsonPath("$", hasSize(0)));
+        mvc.perform(get(API + "/missions/HACK-001/route")).andExpect(jsonPath("$", hasSize(43)))
+                .andExpect(jsonPath("$[0].captured_at").exists());
+        mvc.perform(get(API + "/missions/NOPE/route")).andExpect(status().isNotFound());
+    }
+
+    @Test
     void writesNeedTheKey() throws Exception {
         mvc.perform(post(API + "/demo/reset").contentType(MediaType.APPLICATION_JSON).content("{}"))
                 .andExpect(status().isUnauthorized());
