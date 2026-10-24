@@ -2,6 +2,8 @@ package com.recycllux.pelanode.danube;
 
 import com.recycllux.pelanode.domain.Mission;
 import com.recycllux.pelanode.repo.MissionRepository;
+import com.recycllux.pelanode.scenario.IskarData;
+import com.recycllux.pelanode.scenario.ScenarioTimeline;
 import com.recycllux.pelanode.service.Geo;
 import com.recycllux.pelanode.web.ApiException;
 import java.time.LocalDate;
@@ -36,6 +38,11 @@ public class DanubeService {
     private final DanubeData data;
     private final LevelForecaster forecaster;
     private final MissionRepository missions;
+    private final PropagationAnalyzer propagation;
+    private final TemperatureAnomalyDetector anomalies;
+    private final IskarData iskar;
+
+    static final double DEFAULT_MAX_KM = 320;
 
     public record Thresholds(Double lowCm, Double highCm, String basis) {
     }
@@ -61,10 +68,101 @@ public class DanubeService {
             m.put("coverage", round(data.coverage(s.stationId()), 2));
             m.put("forecastable", forecaster.forecastable(s.stationId()));
             m.put("thresholds", thresholds(s.stationId()));
+            double tc = temperatureCoverage(s.stationId());
+            m.put("temperature_coverage", round(tc, 2));
+            m.put("has_temperature", tc > 0);
+            m.put("chain", PropagationAnalyzer.chain(s));
+            m.put("in_propagation_model", PropagationAnalyzer.inModel(s));
             out.add(m);
         }
         Map<String, Object> view = header();
         view.put("stations", out);
+        view.put("contextual_sources", contextualSources());
+        return view;
+    }
+
+    public Map<String, Object> lags(String source, String minClass, Double maxKm) {
+        requireData();
+        String min = minClass == null ? (source == null ? "C" : "B") : minClass.toUpperCase(Locale.ROOT);
+        if (!List.of("A", "B", "C").contains(min)) {
+            throw ApiException.invalid("min_class must be A, B or C");
+        }
+        Map<String, Object> view = header();
+        view.put("provenance", "derived_from_organiser");
+        view.put("period", period());
+        view.put("method", propagation.method());
+        if (source != null) {
+            DanubeStation s = station(source);
+            if (!PropagationAnalyzer.inModel(s)) {
+                throw ApiException.invalid(s.stationId() + " is not on a lower-Danube chain (below the Iron Gates, km "
+                        + (int) PropagationAnalyzer.IRON_GATES_KM + ")");
+            }
+            double km = maxKm == null ? DEFAULT_MAX_KM : maxKm;
+            List<PropagationAnalyzer.Edge> edges = propagation.downstream(s.stationId(), min, km);
+            view.put("source_station", s);
+            view.put("chain", PropagationAnalyzer.chain(s));
+            view.put("max_distance_km", km);
+            view.put("edges", edges);
+            view.put("downstream_windows", windows(edges));
+        } else {
+            Map<String, Object> chains = new LinkedHashMap<>();
+            for (String c : List.of(PropagationAnalyzer.RO_CHAIN, PropagationAnalyzer.BG_CHAIN)) {
+                chains.put(c, propagation.chainStations(c).stream().map(DanubeStation::stationId).toList());
+            }
+            view.put("chains", chains);
+            view.put("edges", propagation.adjacent(min));
+        }
+        view.put("label", PropagationAnalyzer.LABEL);
+        view.put("note", PropagationAnalyzer.NOTE);
+        return view;
+    }
+
+    /** Operational windows from the nearest gauge, for /point and event detail. */
+    public List<Map<String, Object>> downstreamWindows(String stationId) {
+        DanubeStation s = data.station(stationId).orElse(null);
+        if (s == null || !PropagationAnalyzer.inModel(s)) {
+            return List.of();
+        }
+        return windows(propagation.downstream(s.stationId(), "B", DEFAULT_MAX_KM));
+    }
+
+    public Map<String, Object> anomalies(String stationId, String from, String to, Double threshold,
+                                         boolean includeOneSided, boolean includeInfluenced) {
+        requireData();
+        double th = threshold == null ? TemperatureAnomalyDetector.DEFAULT_THRESHOLD : threshold;
+        if (th <= 0) {
+            throw ApiException.invalid("threshold must be positive");
+        }
+        String id = stationId == null ? null : station(stationId).stationId();
+        LocalDate a = from == null ? data.firstDate() : clampDate(from);
+        LocalDate b = to == null ? data.lastDate() : clampDate(to);
+        TemperatureAnomalyDetector.Result r = anomalies.detect(th);
+        List<TemperatureAnomalyDetector.StationStats> stats = r.stations().stream()
+                .filter(st -> id == null || st.stationId().equals(id))
+                .filter(st -> includeOneSided || "two_sided".equals(st.referenceType()) || st.stationId().equals(id))
+                .toList();
+        List<Map<String, Object>> candidates = new ArrayList<>();
+        for (TemperatureAnomalyDetector.Candidate c : r.candidates()) {
+            if ((id != null && !c.stationId().equals(id)) || c.date().isBefore(a) || c.date().isAfter(b)
+                    || (!includeOneSided && "one_sided".equals(c.referenceType()) && !c.stationId().equals(id))
+                    || (!includeInfluenced && "neighbour_influenced".equals(c.role()))) {
+                continue;
+            }
+            candidates.add(candidate(c, th));
+        }
+        Map<String, Object> method = new LinkedHashMap<>();
+        method.put("id", TemperatureAnomalyDetector.METHOD);
+        method.put("threshold", th);
+        method.put("threshold_status", "proposed_demo_tuning");
+        method.put("sigma", "1.4826 x MAD of the station's residual");
+        Map<String, Object> view = header();
+        view.put("provenance", "derived_from_organiser");
+        view.put("period", period());
+        view.put("method", method);
+        view.put("stations", stats);
+        view.put("candidates", candidates);
+        view.put("label", TemperatureAnomalyDetector.LABEL);
+        view.put("note", TemperatureAnomalyDetector.NOTE);
         return view;
     }
 
@@ -98,6 +196,7 @@ public class DanubeService {
         Map<String, Object> view = header();
         view.put("river", r);
         view.put("date", d);
+        view.put("scenario_date", ScenarioTimeline.toScenario(d));
         view.put("points", points);
         return view;
     }
@@ -116,6 +215,7 @@ public class DanubeService {
             }
             Map<String, Object> row = new LinkedHashMap<>();
             row.put("date", data.date(i));
+            row.put("scenario_date", ScenarioTimeline.toScenario(data.date(i)));
             row.put("level_cm", nanToNull(lv[i]));
             row.put("water_temp_c", nanToNull(t[i]));
             rows.add(row);
@@ -380,10 +480,93 @@ public class DanubeService {
         } catch (DateTimeParseException e) {
             throw ApiException.invalid("date must be YYYY-MM-DD: " + text);
         }
+        d = ScenarioTimeline.toSource(d, data.firstDate().getYear());
         if (d.isBefore(data.firstDate()) || d.isAfter(data.lastDate())) {
             throw ApiException.invalid("date outside the data window " + data.firstDate() + " to " + data.lastDate());
         }
         return d;
+    }
+
+    private Map<String, Object> candidate(TemperatureAnomalyDetector.Candidate c, double th) {
+        Map<String, Object> obs = new LinkedHashMap<>();
+        obs.put("station_id", c.stationId());
+        obs.put("date", c.date());
+        obs.put("scenario_date", ScenarioTimeline.toScenario(c.date()));
+        obs.put("water_temp_c", c.observedC());
+        obs.put("provenance", PROVENANCE);
+        Map<String, Object> model = new LinkedHashMap<>();
+        model.put("method", TemperatureAnomalyDetector.METHOD);
+        model.put("neighbours", c.neighbours());
+        model.put("expected_temp_c", c.expectedC());
+        model.put("residual_c", c.residualC());
+        model.put("robust_z", c.robustZ());
+        model.put("threshold", th);
+        model.put("threshold_status", "proposed_demo_tuning");
+        model.put("reference_type", c.referenceType());
+        model.put("role", c.role());
+        model.put("influenced_by", c.influencedBy());
+        model.put("influenced", c.influenced());
+        Map<String, Object> m = new LinkedHashMap<>();
+        m.put("event_type", "temperature_candidate_anomaly");
+        m.put("event_id", "tca_" + c.stationId() + "_" + c.date());
+        m.put("observation", obs);
+        m.put("model_output", model);
+        m.put("data_quality", Map.of("station_coverage", round(temperatureCoverage(c.stationId()), 2)));
+        m.put("attention", "review_required");
+        m.put("label", TemperatureAnomalyDetector.LABEL);
+        m.put("review", Map.of("status", "unreviewed"));
+        m.put("source_attribution", null);
+        return m;
+    }
+
+    private static List<Map<String, Object>> windows(List<PropagationAnalyzer.Edge> edges) {
+        List<Map<String, Object>> out = new ArrayList<>();
+        for (PropagationAnalyzer.Edge e : edges) {
+            if (!e.operational()) {
+                continue;
+            }
+            Map<String, Object> w = new LinkedHashMap<>();
+            w.put("station_id", e.toStation());
+            w.put("distance_km", e.distanceKm());
+            w.put("window_days", e.monitoringWindowDays());
+            w.put("r_delta_h", e.rDeltaH());
+            w.put("quality_class", e.qualityClass());
+            w.put("label", PropagationAnalyzer.LABEL);
+            out.add(w);
+        }
+        return out;
+    }
+
+    private List<Map<String, Object>> contextualSources() {
+        List<Map<String, Object>> out = new ArrayList<>();
+        if (!iskar.loaded()) {
+            return out;
+        }
+        for (IskarData.Station s : iskar.stations()) {
+            Map<String, Object> m = new LinkedHashMap<>();
+            m.put("station", s);
+            m.put("variable", "discharge_m3s");
+            m.put("data_from", iskar.firstDate());
+            m.put("data_to", iskar.lastDate());
+            m.put("native_overlap_with_danube_days", 0);
+            m.put("compatibility_state", "SCENARIO-ALIGNED");
+            m.put("label", "No native overlap with the Danube dataset (2021); scenario-aligned tributary on the 2025 "
+                    + "timeline");
+            out.add(m);
+        }
+        return out;
+    }
+
+    private Map<String, Object> period() {
+        Map<String, Object> p = new LinkedHashMap<>();
+        p.put("from", data.firstDate());
+        p.put("to", data.lastDate());
+        return p;
+    }
+
+    private double temperatureCoverage(String stationId) {
+        double[] t = data.temps(stationId);
+        return data.days() == 0 ? 0 : Arrays.stream(t).filter(v -> !Double.isNaN(v)).count() / (double) data.days();
     }
 
     private Map<String, Object> header() {
@@ -392,6 +575,7 @@ public class DanubeService {
         m.put("source", SOURCE);
         m.put("data_from", data.firstDate());
         m.put("data_to", data.lastDate());
+        m.put("scenario", ScenarioTimeline.info(data.firstDate().getYear()));
         return m;
     }
 

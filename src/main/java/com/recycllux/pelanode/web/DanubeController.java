@@ -51,6 +51,25 @@ public class DanubeController {
         return points.at(lat, lon, asOf, month);
     }
 
+    @GetMapping("/lags")
+    public Map<String, Object> lags(@RequestParam(required = false) String source,
+                                    @RequestParam(name = "min_class", required = false) String minClass,
+                                    @RequestParam(name = "max_km", required = false) Double maxKm) {
+        return danube.lags(source, minClass, maxKm);
+    }
+
+    @GetMapping("/anomalies")
+    public Map<String, Object> anomalies(@RequestParam(required = false) String station,
+                                         @RequestParam(required = false) String from,
+                                         @RequestParam(required = false) String to,
+                                         @RequestParam(required = false) Double threshold,
+                                         @RequestParam(name = "include_one_sided", defaultValue = "false")
+                                         boolean includeOneSided,
+                                         @RequestParam(name = "include_influenced", defaultValue = "true")
+                                         boolean includeInfluenced) {
+        return danube.anomalies(station, from, to, threshold, includeOneSided, includeInfluenced);
+    }
+
     @GetMapping("/backtest")
     public Map<String, Object> backtest(@RequestParam String station) {
         return danube.backtest(station);

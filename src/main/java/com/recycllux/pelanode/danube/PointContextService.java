@@ -1,6 +1,7 @@
 package com.recycllux.pelanode.danube;
 
 import com.recycllux.pelanode.climate.ClimateGrids;
+import com.recycllux.pelanode.scenario.ScenarioTimeline;
 import com.recycllux.pelanode.service.Geo;
 import com.recycllux.pelanode.web.ApiException;
 import java.time.LocalDate;
@@ -71,6 +72,8 @@ public class PointContextService {
         g.put("water_temp_c", Double.isNaN(temp) ? null : temp);
         g.put("thresholds", danube.thresholds(s.stationId()));
         g.put("forecastable", forecaster.forecastable(s.stationId()));
+        g.put("downstream_windows", danube.downstreamWindows(s.stationId()));
+        g.put("downstream_windows_note", PropagationAnalyzer.NOTE);
         return g;
     }
 
@@ -103,7 +106,8 @@ public class PointContextService {
 
     private LocalDate parse(String text) {
         try {
-            LocalDate d = LocalDate.parse(text.length() > 10 ? text.substring(0, 10) : text);
+            LocalDate d = ScenarioTimeline.toSource(LocalDate.parse(text.length() > 10 ? text.substring(0, 10) : text),
+                    data.firstDate().getYear());
             if (d.isBefore(data.firstDate()) || d.isAfter(data.lastDate())) {
                 throw ApiException.invalid("as_of outside the Danube data window " + data.firstDate() + " to "
                         + data.lastDate());
