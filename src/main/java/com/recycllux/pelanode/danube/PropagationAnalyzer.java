@@ -1,5 +1,6 @@
 package com.recycllux.pelanode.danube;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
@@ -55,7 +56,7 @@ public class PropagationAnalyzer {
             Double rLevelOptimalLag,
             Integer optimalLagDaysDeltaH,
             Double rDeltaH,
-            Double rDeltaHAtLevelLag,
+            @JsonProperty("r_delta_h_at_level_lag") Double rDeltaHAtLevelLag,
             Window monitoringWindowDays,
             String qualityClass,
             boolean operational,

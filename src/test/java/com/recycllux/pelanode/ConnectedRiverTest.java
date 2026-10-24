@@ -43,6 +43,7 @@ class ConnectedRiverTest {
                 .andExpect(jsonPath("$.edges[?(@.to_station=='BECHET')].r_delta_h", contains(closeTo(0.888, 0.001))))
                 .andExpect(jsonPath("$.edges[?(@.to_station=='GIURGIU')].optimal_lag_days_level", contains(3)))
                 .andExpect(jsonPath("$.edges[?(@.to_station=='GIURGIU')].optimal_lag_days_delta_h", contains(2)))
+                .andExpect(jsonPath("$.edges[?(@.to_station=='GIURGIU')].r_delta_h_at_level_lag", contains(closeTo(0.689, 0.001))))
                 .andExpect(jsonPath("$.edges[?(@.to_station=='GIURGIU')].monitoring_window_days.min", contains(2)))
                 .andExpect(jsonPath("$.edges[?(@.to_station=='GIURGIU')].monitoring_window_days.max", contains(3)))
                 .andExpect(jsonPath("$.edges[*].quality_class", everyItem(is("A"))))
