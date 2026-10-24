@@ -8,10 +8,10 @@
   "planned_start": "2026-10-24T14:22:00.000Z",
   "planned_end": "2026-10-24T15:04:00.000Z",
   "area_bbox": [
-    25.9,
-    43.88,
-    25.98,
-    43.92
+    25.95,
+    43.86,
+    26.01,
+    43.89
   ],
   "event_id_start": 142,
   "data_origin": "simulated",
