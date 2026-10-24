@@ -97,7 +97,8 @@ scripts/                  demo pack builder, build-ui, run-local, reset-demo, sm
 Organiser data from `Share/Danube` (daily levels, 61 bulletin stations from Germany to Tulcea plus 13 Bulgarian
 automatic gauges, 2021-06-06 to 2021-11-09) is cleaned into `data/danube/` by
 `python3 scripts/build_danube_pack.py <Share/Danube dir>`; see `data/danube/PROVENANCE.md`.
-All endpoints are read-only and dates are in that 2021 window.
+All endpoints are read-only. Dates can be given in that 2021 window or on the common 2025 scenario timeline
+(`2025-MM-DD`, mapped back to 2021); every response carries a `scenario` block and dated rows carry `scenario_date`.
 
 - `GET /api/v1/danube/stations`: stations, data coverage, demo thresholds
 - `GET /api/v1/danube/profile?date=`: level, 24 h change and anomaly against the station median, by river km, for one day
@@ -115,6 +116,43 @@ The model is a ridge regression on 1 and 3 day level changes at upstream gauges 
 refitted for every as-of date on data available at that date only. Giurgiu: mean error 1.6 cm at 1 day and
 13.8 cm at 6 days, against 8.1 and 39.8 cm for "no change". Thresholds are the station's P10/P90, a stand-in until
 the navigation and flood-alert levels are configured.
+
+## Connected river intelligence (P0-19 v1.3)
+
+PelaNode turns fragmented river-monitoring data into connected downstream intelligence: it learns hydrological
+propagation between stations, estimates where and when authorities should monitor downstream, and flags candidate
+environmental anomalies for investigation.
+
+- `GET /api/v1/danube/lags?source=&min_class=&max_km=`: without `source`, edges between consecutive gauges of the two
+  lower-Danube chains (bulletin, Bulgarian automatic; below the Iron Gates, km 943); with `source`, every downstream
+  gauge of its chain within `max_km` (default 320). Each edge: overlap `n`, gap rate, level and Δh correlation, the
+  lags that maximise them, a monitoring window (range in days) and a quality class A/B/C (demo tuning).
+  The lag is the historical propagation of the river-level signal, never a pollutant travel time.
+- `GET /api/v1/danube/anomalies?station=&from=&to=&threshold=&include_one_sided=&include_influenced=`: candidate
+  water-temperature anomalies on the Bulgarian gauges: residual against the mean of the two neighbouring temperature
+  stations, minus the station's usual offset, scored with a robust z (σ = 1.4826 × MAD, threshold 4, demo tuning).
+  Adjacent flags of opposite sign on the same day keep the largest |z| as `primary` and mark the others
+  `neighbour_influenced`. End stations (one neighbour) are hidden unless `include_one_sided=true`. Candidates are
+  `review_required`, with no source attribution.
+- `/api/v1/danube/point` adds `downstream_windows` from the nearest gauge; `/api/v1/danube/stations` adds `chain`,
+  `has_temperature`, `temperature_coverage`, `in_propagation_model` and `contextual_sources` (Iskar).
+
+### 2025 scenario timeline and Iskar handoff
+
+Iskar discharge (organiser files, native 2025) is cleaned into `data/iskar/` by
+`python3 scripts/build_iskar_pack.py <Share dir>`; see `data/iskar/PROVENANCE.md`. It does not overlap the 2021
+Danube data natively, so it is shown only as a **scenario-aligned** tributary input on the common 2025 timeline.
+
+- `GET /api/v1/scenario/datasets`: compatibility state per dataset (DEMONSTRATED, SCENARIO-ALIGNED, CONTEXT ONLY,
+  OPTIONAL CONTEXT, FUTURE) and the shared Danube–Iskar window (2025-07-12 to 2025-11-09)
+- `GET /api/v1/scenario/tributaries/iskar?from=&to=`: Novi Iskar and Orehovitsa discharge (gaps stay missing), the
+  confluence node (~km 637) and the days whose rise over the previous day is at least 5 m³/s (demo tuning)
+- `POST /api/v1/scenario/tributaries/iskar/event` `{"station_id","scenario_date"}`: a tributary input event handed off
+  at the confluence to the windows of the first gauge below it on each chain (Corabia, Zagrazhden; Nikopol is class C
+  and listed as excluded). 422 outside the shared window or on a data gap. It computes a view and stores nothing, so
+  it does not need the write key.
+
+No Iskar–Danube correlation is computed: the handoff is topology, not measured propagation.
 
 Climate grids (precipitation and soil moisture over Bulgaria, monthly 2024) come from the organiser's Earth Engine
 exports, built into `data/climate/` by `python3 scripts/build_climate_pack.py <Share/gee_output dir>`; see

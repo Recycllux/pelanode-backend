@@ -17,6 +17,7 @@ public class WriteKeyFilter extends OncePerRequestFilter {
 
     private static final Logger log = LoggerFactory.getLogger(WriteKeyFilter.class);
     public static final String HEADER = "X-PN-Key";
+    static final String COMPUTE_ONLY = "/api/v1/scenario/tributaries/iskar/event";
 
     private final byte[] key;
 
@@ -30,7 +31,9 @@ public class WriteKeyFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
-        return !"POST".equals(request.getMethod()) || !request.getRequestURI().startsWith("/api/");
+        // the Iskar event endpoint only computes a view and stores nothing, so the portal can call it without a key
+        return !"POST".equals(request.getMethod()) || !request.getRequestURI().startsWith("/api/")
+                || COMPUTE_ONLY.equals(request.getRequestURI());
     }
 
     @Override

@@ -14,6 +14,7 @@ WORKDIR /app
 COPY --from=backend /build/target/pelanode-poc.jar app.jar
 COPY data/demo /app/data/demo
 COPY data/danube /app/data/danube
+COPY data/iskar /app/data/iskar
 COPY data/climate /app/data/climate
 ENV SPRING_PROFILES_ACTIVE=cloud \
     PN_DB_URL=jdbc:h2:file:/tmp/pelanode \
