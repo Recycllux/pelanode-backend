@@ -23,6 +23,11 @@ public class EventController {
         return events.track(id, until, format);
     }
 
+    @GetMapping("/missions/{id}/route")
+    public Object route(@PathVariable String id) {
+        return events.route(id);
+    }
+
     @GetMapping("/events")
     public Object list(@RequestParam("mission_id") String missionId,
                        @RequestParam(required = false) String until,
