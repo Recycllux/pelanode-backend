@@ -14,3 +14,10 @@ Cleaning: date separator rows, "притоци" header rows and duplicate (date,
 
 Station coordinates are **not** in the source files. `stations.csv` holds approximate town or bridge positions
 (`coords_approx=true`), good enough for a map marker and the nearest-station lookup, not for survey work.
+Where `station_coords.csv` gives a sourced position, it replaces the approximate one (`coords_approx=false`,
+source in `coords_source`):
+
+- Schwabelweis, Pfelling, Hofkirchen: gauge positions from the WSV PEGELONLINE REST API.
+- Other Danube stations: run `scripts/fetch_station_coords_osm.py` on a machine with internet access. It places
+  each gauge on the river at its km by interpolating the OpenStreetMap Danube kilometre milestones (ODbL), then
+  rerun `scripts/build_danube_pack.py`. Tributary stations (Sava, Tisza, Velika Morava) stay approximate.

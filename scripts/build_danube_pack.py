@@ -8,7 +8,9 @@ Inputs (Bulgarian headers, UTF-8):
 Cleaning: separator rows (empty station), the "притоци" header rows, duplicate (date, station) rows,
 the -987 sentinel and "nil" are dropped. Values are kept as published (cm above gauge zero, °C).
 Station coordinates are not in the source data: the table below holds approximate town or bridge
-positions, flagged coords_approx=true.
+positions, flagged coords_approx=true. Where <output_dir>/station_coords.csv gives a sourced position
+(PEGELONLINE gauge, or OSM Danube km milestones via scripts/fetch_station_coords_osm.py), that position
+is used instead, with coords_approx=false and its source in coords_source.
 
 Usage: python3 scripts/build_danube_pack.py <Share/Danube dir> [output_dir]   (default data/danube)
 """
@@ -21,6 +23,8 @@ OUT = Path(sys.argv[2] if len(sys.argv) > 2 else "data/danube")
 BULLETIN = "БюлетинЗаХидрологичнатаОбстановкаПоРекаДунав.csv"
 AUTOMATIC = "АвтоматичниXидрометричниСтанции.csv"
 MISSING = {"", "nil", "-987"}
+COORDS = "station_coords.csv"
+APPROX_SOURCE = "approximate town or bridge position (hand-entered)"
 
 # source name -> (station_id, English name, country ISO, river, lat, lon)
 STATIONS = {
@@ -140,14 +144,23 @@ def main():
             add(date, name, number(km), number(level), number(temp), "automatic")
 
     OUT.mkdir(parents=True, exist_ok=True)
+    sourced = {}
+    if (OUT / COORDS).exists():
+        with open(OUT / COORDS, encoding="utf-8", newline="") as f:
+            for r in csv.DictReader(f):
+                sourced[r["station_id"]] = (float(r["lat"]), float(r["lon"]), r["coords_source"])
     with open(OUT / "stations.csv", "w", encoding="utf-8", newline="") as f:
         w = csv.writer(f, lineterminator="\n")
         w.writerow(["station_id", "name", "name_bg", "country", "river", "river_km", "lat", "lon",
-                    "coords_approx", "source"])
+                    "coords_approx", "source", "coords_source"])
         for name, (km, source) in sorted(stations.items(), key=lambda s: (STATIONS[s[0]][3] != "Danube",
                                                                          STATIONS[s[0]][3], -(s[1][0] or 0))):
             sid, en, country, river, lat, lon = STATIONS[name]
-            w.writerow([sid, en, name, country, river, km, lat, lon, "true", source])
+            if sid in sourced:
+                lat, lon, csrc = sourced[sid]
+                w.writerow([sid, en, name, country, river, km, lat, lon, "false", source, csrc])
+            else:
+                w.writerow([sid, en, name, country, river, km, lat, lon, "true", source, APPROX_SOURCE])
     with open(OUT / "levels.csv", "w", encoding="utf-8", newline="") as f:
         w = csv.writer(f, lineterminator="\n")
         w.writerow(["date", "station_id", "level_cm", "water_temp_c", "source"])

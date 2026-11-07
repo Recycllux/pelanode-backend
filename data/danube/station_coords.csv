@@ -1,0 +1,4 @@
+station_id,lat,lon,coords_source
+SCHWABELWEIS,49.023583,12.138693,PEGELONLINE (WSV) gauge position https://www.pegelonline.wsv.de/webservices/rest-api/v2/stations.json?waters=DONAU
+PFELLING,48.879766,12.747217,PEGELONLINE (WSV) gauge position https://www.pegelonline.wsv.de/webservices/rest-api/v2/stations.json?waters=DONAU
+HOFKIRCHEN,48.676675,13.115154,PEGELONLINE (WSV) gauge position https://www.pegelonline.wsv.de/webservices/rest-api/v2/stations.json?waters=DONAU
